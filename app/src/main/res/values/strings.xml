@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">书舟</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="tab_text_android">Android</string>
+    <string name="tab_text_ios">IOS</string>
+    <string name="tab_text_java">Java</string>
+    <string name="tab_text_python">Python</string>
+    <string name="tab_text_javascript">JavaScript</string>
+    <string name="tab_text_html5">Html5</string>
+    <string name="tab_text_linux">Linux</string>
+    <string name="tab_text_csharp">C#</string>
+    <string name="tab_text_jquery">Jquery</string>
+    <string name="tab_text_db">数据库</string>
+    <string name="tab_text_machinelearn">机器学习</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>
