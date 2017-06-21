@@ -1,6 +1,9 @@
 package com.wuqiyan.shuzz.net;
 
+import android.content.Context;
+
 import com.wuqiyan.shuzz.comm.Constant;
+import com.wuqiyan.shuzz.comm.SPUtils;
 import com.wuqiyan.shuzz.model.IturingBookModel;
 
 import org.jsoup.Jsoup;
@@ -34,6 +37,10 @@ public class IturingImpl{
     public void setOnLoadPagesListener(OnLoadPagesListener onLoadPagesListener){
         this.onLoadPagesListener=onLoadPagesListener;
     }
+    private Context mContext;
+    public IturingImpl(Context context){
+        this.mContext=context;
+    }
 
 
     public void getAndroidPages(int type){
@@ -44,7 +51,8 @@ public class IturingImpl{
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    System.out.println(parseIturingPages(response.body().string()));
+                    String pages = parseIturingPages(response.body().string());
+                    new SPUtils(mContext,"conf").putString("android",pages);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
