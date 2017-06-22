@@ -4,7 +4,7 @@ package com.wuqiyan.shuzz.model;
  * Created by wuqiyan on 17/6/21.
  */
 
-public class IturingBookModel {
+public class BookModel {
         public String bookImgUrl;
         public String bookName;
         public String author;

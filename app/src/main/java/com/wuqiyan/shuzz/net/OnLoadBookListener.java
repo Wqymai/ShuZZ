@@ -1,6 +1,6 @@
 package com.wuqiyan.shuzz.net;
 
-import com.wuqiyan.shuzz.model.IturingBookModel;
+import com.wuqiyan.shuzz.model.BookModel;
 
 import java.util.List;
 
@@ -9,6 +9,6 @@ import java.util.List;
  */
 
 public interface OnLoadBookListener {
-    void onSuccess(List<IturingBookModel> books);
+    void onSuccess(List<BookModel> books);
     void onFailure(String error);
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.wuqiyan.shuzz.comm.Constant;
 import com.wuqiyan.shuzz.comm.SPUtils;
-import com.wuqiyan.shuzz.model.IturingBookModel;
+import com.wuqiyan.shuzz.model.BookModel;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -75,7 +75,7 @@ public class IturingImpl{
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    List<IturingBookModel> bookList = parseIturingBook(response.body().string());
+                    List<BookModel> bookList = parseIturingBook(response.body().string());
                     onLoadBookListener.onSuccess(bookList);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -89,13 +89,13 @@ public class IturingImpl{
         });
 
     }
-    private List<IturingBookModel> parseIturingBook(String responseBody){
-          List<IturingBookModel> models = new ArrayList<>();
+    private List<BookModel> parseIturingBook(String responseBody){
+          List<BookModel> models = new ArrayList<>();
           try {
               Document doc_content = Jsoup.parse(responseBody);
               Elements element_lis = doc_content.select("li.block-item");
               for (Element li : element_lis){
-                  IturingBookModel bookModel=new IturingBookModel();
+                  BookModel bookModel=new BookModel();
                   Document doc_li = Jsoup.parse(li.toString());
                   bookModel.bookImgUrl= doc_li.select("img").attr("src");
                   bookModel.bookName = doc_li.select("h4 a").text();

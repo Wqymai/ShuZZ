@@ -1,10 +1,12 @@
-package com.wuqiyan.shuzz;
+package com.wuqiyan.shuzz.widget;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.comm.Constant;
 import com.wuqiyan.shuzz.net.IturingImpl;
 
@@ -19,12 +21,12 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this,IndexActivity.class));
-                IturingImpl ituring=new IturingImpl();
+                startActivity(new Intent(MainActivity.this,IndexActivity.class));
+                IturingImpl ituring=new IturingImpl(getApplicationContext());
 //                ituring.getAndroid_Ituring(0);
 //                ituring.setOnLoadBookListener(new OnLoadBookListener() {
 //                    @Override
-//                    public void onSuccess(List<IturingBookModel> books) {
+//                    public void onSuccess(List<BookModel> books) {
 //                        Log.i("TAG",books.toString());
 //                    }
 //

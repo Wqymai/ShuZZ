@@ -1,4 +1,4 @@
-package com.wuqiyan.shuzz;
+package com.wuqiyan.shuzz.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
