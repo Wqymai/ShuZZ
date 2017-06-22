@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wuqiyan.shuzz.Adapter.BooksListAdapter;
+import com.wuqiyan.shuzz.adapter.BooksListAdapter;
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.net.IturingImpl;
@@ -25,7 +25,7 @@ import java.util.List;
  * Created by wuqiyan on 2017/6/19.
  */
 
-public class RecycleFragment extends Fragment implements OnLoadBookListener{
+public class RecycleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener{
 
     private RecyclerView mRecyclerView;
     private List<BookModel> mDatas=new ArrayList<>();
@@ -34,6 +34,7 @@ public class RecycleFragment extends Fragment implements OnLoadBookListener{
     private LinearLayoutManager mLayoutManager;
     private static final int REFRESH_COMPLETE = 0X110;
     IturingImpl ituring;
+    private int firstPage = 0;
     private int currPage = 0;
     private int TotalPage = 2;
 
@@ -61,15 +62,8 @@ public class RecycleFragment extends Fragment implements OnLoadBookListener{
             mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.id_swipe_ly);
             mSwipeLayout.setColorSchemeResources(R.color.colorAccent);
             mSwipeLayout.setRefreshing(true);
+            mSwipeLayout.setOnRefreshListener(this);
 
-
-            mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    Log.i("TAG","正在刷新...");
-                    mHandler.sendEmptyMessageDelayed(REFRESH_COMPLETE, 2000);
-                }
-            });
 
             ituring = new IturingImpl(getContext());
             ituring.getAndroid_Ituring(currPage);
@@ -107,7 +101,16 @@ public class RecycleFragment extends Fragment implements OnLoadBookListener{
                     currPage++;
                 }
                 else {
-
+                    mAdapter.setNoMoreData(true);
+                    mAdapter.notifyDataSetChanged();
+                    Handler handler=new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.setHide(true);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    },1000);
                 }
             }
         }
@@ -126,4 +129,8 @@ public class RecycleFragment extends Fragment implements OnLoadBookListener{
 
     }
 
+    @Override
+    public void onRefresh() {
+      ituring.getAndroid_Ituring(firstPage);
+    }
 }

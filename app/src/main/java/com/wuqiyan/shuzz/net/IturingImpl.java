@@ -97,10 +97,29 @@ public class IturingImpl{
               for (Element li : element_lis){
                   BookModel bookModel=new BookModel();
                   Document doc_li = Jsoup.parse(li.toString());
-                  bookModel.bookImgUrl= doc_li.select("img").attr("src");
+
+                  bookModel.bookImgUrl = doc_li.select("img").attr("src");
+
                   bookModel.bookName = doc_li.select("h4 a").text();
-                  bookModel.author = doc_li.select(".author span").first().text();
-                  bookModel.desc = doc_li.select("p.intro").text();
+
+                  Elements author_elements = doc_li.select(".author span");
+
+                  if (author_elements.isEmpty()){
+                      bookModel.author="";
+                  }
+                  else {
+                     bookModel.author = author_elements.first().text();
+                  }
+
+                  Elements desc_elements=doc_li.select("p.intro");
+                  if (desc_elements.isEmpty()){
+
+                      bookModel.desc="";
+
+                  }else {
+                      bookModel.desc = desc_elements.text();
+                  }
+
                   models.add(bookModel);
               }
           }catch (Exception e){

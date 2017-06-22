@@ -1,12 +1,15 @@
-package com.wuqiyan.shuzz.Adapter;
+package com.wuqiyan.shuzz.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.model.BookModel;
 
@@ -23,8 +26,11 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private List<BookModel> mBooksData=new ArrayList<>();
     private Context mContext;
     private boolean mShowFooter = true;
+    private boolean noMoreData = false;
+    private boolean hide = false;
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
+    private static final int TYPE_NOMORE_DATA = 2;
 
     public BooksListAdapter(Context context){
         this.mContext=context;
@@ -38,8 +44,10 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-
-        if (position+1 == getItemCount()){
+        if (position+1 == getItemCount() && !hide){
+            if (noMoreData){
+                return TYPE_NOMORE_DATA;
+            }
             return TYPE_FOOTER;
         }
         else {
@@ -55,9 +63,14 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ItemHolder holder = new ItemHolder(v);
             return holder;
         }
-        else {
+        else if (viewType == TYPE_FOOTER){
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_footer, parent, false);
             FootHolder holder = new FootHolder(v);
+            return holder;
+        }
+        else{
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_nomore_data, parent, false);
+            NODataHolder holder = new NODataHolder(v);
             return holder;
         }
 
@@ -66,34 +79,59 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemHolder){
-            ((ItemHolder) holder).tv.setText(mBooksData.get(position).bookName);
+            ((ItemHolder) holder).bkname.setText(mBooksData.get(position).bookName);
+            ((ItemHolder) holder).desc.setText(mBooksData.get(position).desc);
+            Picasso.with(mContext).load(mBooksData.get(position).bookImgUrl)
+                    .resize(155, 185)
+                    .centerCrop()
+                    .into(((ItemHolder) holder).img);
         }
 
+    }
+    public void setNoMoreData(boolean noMoreData){
+        this.noMoreData = noMoreData;
+    }
+    public void setHide(boolean hide){
+        this.hide = hide;
     }
 
     @Override
     public int getItemCount() {
+
         if (mBooksData.size() <= 0){
           return 0;
         }
         else {
-          return mBooksData.size()+1;
+            if (hide){
+                return mBooksData.size();
+            }
+            return mBooksData.size()+1;
         }
     }
     class ItemHolder extends RecyclerView.ViewHolder
     {
 
-        TextView tv;
+        TextView bkname;
+        TextView desc;
+        ImageView img;
 
         public ItemHolder(View view)
         {
             super(view);
-            tv = (TextView) view.findViewById(R.id.item_desc);
+            desc = (TextView) view.findViewById(R.id.item_desc);
+            bkname= (TextView) view.findViewById(R.id.item_bkname);
+            img= (ImageView) view.findViewById(R.id.item_image);
         }
     }
     class FootHolder extends RecyclerView.ViewHolder{
 
         public FootHolder(View itemView) {
+            super(itemView);
+        }
+    }
+    class NODataHolder extends RecyclerView.ViewHolder{
+
+        public NODataHolder(View itemView) {
             super(itemView);
         }
     }

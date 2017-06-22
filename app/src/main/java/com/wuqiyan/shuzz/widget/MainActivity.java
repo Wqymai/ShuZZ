@@ -3,12 +3,17 @@ package com.wuqiyan.shuzz.widget;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.comm.Constant;
+import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.net.IturingImpl;
+import com.wuqiyan.shuzz.net.OnLoadBookListener;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,IndexActivity.class));
-                IturingImpl ituring=new IturingImpl(getApplicationContext());
-//                ituring.getAndroid_Ituring(0);
+//                IturingImpl ituring=new IturingImpl(getApplicationContext());
+//                ituring.getAndroid_Ituring(1);
 //                ituring.setOnLoadBookListener(new OnLoadBookListener() {
 //                    @Override
 //                    public void onSuccess(List<BookModel> books) {
@@ -35,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //                    }
 //                });
-                ituring.getAndroidPages(Constant.ITURING_ANDROID);
+//                ituring.getAndroidPages(Constant.ITURING_ANDROID);
             }
         });
 
