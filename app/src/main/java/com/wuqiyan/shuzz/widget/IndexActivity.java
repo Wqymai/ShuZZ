@@ -83,7 +83,7 @@ public class IndexActivity extends AppCompatActivity {
                     break;
 
             }
-            RecycleFragment fragment=new RecycleFragment();
+            BookFragment fragment=new BookFragment();
             Bundle args = new Bundle();
             args.putString(Constant.BOOKTYPE, type);
             fragment.setArguments(args);

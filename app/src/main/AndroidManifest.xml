@@ -21,7 +21,8 @@
             android:name=".widget.IndexActivity"
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".widget.FragmentActivity"></activity>
+        <activity android:name=".widget.Index2Activity"></activity>
+
     </application>
 
 </manifest>

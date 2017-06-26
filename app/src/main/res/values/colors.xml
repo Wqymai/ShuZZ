@@ -5,4 +5,13 @@
     <color name="colorAccent">#FF4081</color>
     <color name="whitesmoke">#f6f6f6</color>
     <color name="border">#E4E4E4</color>
+
+    <color name="colorbttonfont">#5E5E5E</color>
+    <color name="colorblue">#2196f3</color>
+    <color name="colortitle">#474747</color>
+    <color name="colororange">#FFA500</color>
+    <color name="colorpurple">#7e57c2</color>
+    <color name="colorpurple2">#B23AEE</color>
+    <color name="white">#ffffff</color>
+    <color name="nowhite">#EDEDED</color>
 </resources>

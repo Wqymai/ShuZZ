@@ -27,7 +27,7 @@ import java.util.List;
  * Created by wuqiyan on 2017/6/19.
  */
 
-public class RecycleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener,OnLoadPagesListener{
+public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener,OnLoadPagesListener{
 
     private RecyclerView mRecyclerView;
     private List<BookModel> mDatas=new ArrayList<>();

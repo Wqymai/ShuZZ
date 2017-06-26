@@ -1,87 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.wuqiyan.shuzz.widget.IndexActivity">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
 
 
         <android.support.design.widget.TabLayout
-            app:tabTextAppearance="@android:style/TextAppearance.Holo.Medium"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
             android:id="@+id/tabs"
+            app:tabSelectedTextColor="@color/colorPrimary"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_androi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_android" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_python"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_python" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_javascript"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_javascript" />
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_html5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_html5" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_linux"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_linux" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_csharp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_csharp" />
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_ios"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_ios" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_jquery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_jquery" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_db"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_db" />
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem_machinelearn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_text_machinelearn" />
-
-
         </android.support.design.widget.TabLayout>
-    </android.support.design.widget.AppBarLayout>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
@@ -90,4 +27,4 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>
