@@ -5,6 +5,6 @@ package com.wuqiyan.shuzz.net;
  */
 
 public interface OnLoadPagesListener {
-    void onSuccess();
+    void onSuccess(int pages);
     void onFailure();
 }

@@ -7,16 +7,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wuqiyan.shuzz.adapter.BooksListAdapter;
 import com.wuqiyan.shuzz.R;
+import com.wuqiyan.shuzz.adapter.BooksListAdapter;
+import com.wuqiyan.shuzz.comm.Constant;
+import com.wuqiyan.shuzz.comm.SPUtils;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.net.IturingImpl;
 import com.wuqiyan.shuzz.net.OnLoadBookListener;
+import com.wuqiyan.shuzz.net.OnLoadPagesListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,38 +27,25 @@ import java.util.List;
  * Created by wuqiyan on 2017/6/19.
  */
 
-public class RecycleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener{
+public class RecycleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener,OnLoadPagesListener{
 
     private RecyclerView mRecyclerView;
     private List<BookModel> mDatas=new ArrayList<>();
     private BooksListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeLayout;
     private LinearLayoutManager mLayoutManager;
-    private static final int REFRESH_COMPLETE = 0X110;
     IturingImpl ituring;
     private int firstPage = 0;
     private int currPage = 0;
-    private int TotalPage = 2;
-
-    private Handler mHandler = new Handler()
-    {
-        public void handleMessage(android.os.Message msg)
-        {
-            switch (msg.what)
-            {
-                case REFRESH_COMPLETE:
-                    Log.i("TAG","刷新成功...");
-                    mSwipeLayout.setRefreshing(false);
-                    break;
-
-            }
-        }
-    };
+    private int TotalPage;
+    String type;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+            type = getArguments().getString(Constant.BOOKTYPE);
 
             View  rootView = inflater.inflate(R.layout.fragment_section,container,false);
             mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.id_swipe_ly);
@@ -66,9 +55,10 @@ public class RecycleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 
             ituring = new IturingImpl(getContext());
-            ituring.getAndroid_Ituring(currPage);
+            checkFirstEnter();
+            ituring.getIturingBook(type,currPage);
             ituring.setOnLoadBookListener(this);
-            mAdapter = new BooksListAdapter(getContext());
+            mAdapter = new BooksListAdapter(getContext(),1);
 
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycleview);
@@ -97,7 +87,7 @@ public class RecycleFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     && lastVisibleItem + 1 == mAdapter.getItemCount()){
                 int newPage = currPage+1;
                 if (newPage < TotalPage){
-                    ituring.getAndroid_Ituring(newPage);
+                    ituring.getIturingBook(type,newPage);
                     currPage++;
                 }
                 else {
@@ -107,15 +97,18 @@ public class RecycleFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+
                             mAdapter.setHide(true);
                             mAdapter.notifyDataSetChanged();
                         }
-                    },1000);
+                    },2000);
                 }
             }
         }
 
     };
+
+
 
     @Override
     public void onSuccess(List<BookModel> books) {
@@ -131,6 +124,25 @@ public class RecycleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-      ituring.getAndroid_Ituring(firstPage);
+      ituring.getIturingBook(type,firstPage);
+    }
+
+    @Override
+    public void onSuccess(int pages) {
+        this.TotalPage = pages;
+    }
+
+    @Override
+    public void onFailure() {
+
+    }
+    private void   checkFirstEnter(){
+       String pages = new SPUtils(getContext(),"conf").getString(type,"-1");
+       if (pages.equals("-1")){
+           ituring.getIturingPages(type);
+           ituring.setOnLoadPagesListener(this);
+       }else {
+           this.TotalPage = Integer.parseInt(pages);
+       }
     }
 }

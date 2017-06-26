@@ -43,16 +43,21 @@ public class IturingImpl{
     }
 
 
-    public void getAndroidPages(int type){
+    public void getIturingPages(final String type){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.ITURING_BASEURL).build();
         IturingApi ituringApi = retrofit.create(IturingApi.class);
-        Call<ResponseBody> call = ituringApi.getIturingPages(type);
+        int num= getBookNumberInIturing(type);
+        if (num == -1){
+            return;
+        }
+        Call<ResponseBody> call = ituringApi.getIturingPages(num);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String pages = parseIturingPages(response.body().string());
-                    new SPUtils(mContext,"conf").putString("android",pages);
+                    new SPUtils(mContext,"conf").putString(type,pages);
+                    onLoadPagesListener.onSuccess(Integer.parseInt(pages));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -66,11 +71,14 @@ public class IturingImpl{
     }
 
 
-    public void getAndroid_Ituring(int page){
-
+    public void getIturingBook(String type,int page){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.ITURING_BASEURL).build();
         IturingApi ituringApi = retrofit.create(IturingApi.class);
-        Call<ResponseBody> call = ituringApi.getIturingBook(Constant.ITURING_ANDROID,page);
+        int num = getBookNumberInIturing(type);
+        if (num == -1){
+            return;
+        }
+        Call<ResponseBody> call = ituringApi.getIturingBook(num,page);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -89,6 +97,49 @@ public class IturingImpl{
         });
 
     }
+
+    private int getBookNumberInIturing(String type){
+        int num = -1;
+        if (type == null){
+            return num;
+        }
+        switch (type){
+            case Constant.ANDROID:
+                num = Constant.ITURING_ANDROID;
+                break;
+            case Constant.PYTHON:
+                num = Constant.ITURING_PYTHON;
+                break;
+            case Constant.JAVASCRIPT:
+                num = Constant.ITURING_JAVASCRIPT;
+                break;
+            case Constant.HTML5:
+                num = Constant.ITURING_HTML5;
+                break;
+            case Constant.LINUX:
+                num = Constant.ITURING_LINUX;
+                break;
+            case Constant.CSHARP:
+                num = Constant.ITURING_CSHARP;
+                break;
+            case Constant.IOS:
+                num = Constant.ITURING_IOS;
+                break;
+            case Constant.JQUERY:
+                num = Constant.ITURING_JQUERY;
+                break;
+            case Constant.DB:
+                num = Constant.ITURING_DB;
+                break;
+            case Constant.MACHINELEARN:
+                num = Constant.ITURING_MACHINELEARN;
+                break;
+            default:
+                break;
+        }
+        return num;
+    }
+
     private List<BookModel> parseIturingBook(String responseBody){
           List<BookModel> models = new ArrayList<>();
           try {
@@ -129,7 +180,12 @@ public class IturingImpl{
     }
 
     private String parseIturingPages(String responseBody){
+        String pages="0";
         Document doc_content = Jsoup.parse(responseBody);
-        return doc_content.select(".PagedList-pager ul").first().select("li").last().select("a").text();
+        Elements ul_eles=doc_content.select(".block-books .PagedList-pager ul");
+        if (!ul_eles.isEmpty()){
+            pages=ul_eles.first().select("li").last().select("a").text();
+        }
+        return pages;
     }
 }

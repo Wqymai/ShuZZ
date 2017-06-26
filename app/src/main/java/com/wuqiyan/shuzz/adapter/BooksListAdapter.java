@@ -2,7 +2,6 @@ package com.wuqiyan.shuzz.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +27,14 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private boolean mShowFooter = true;
     private boolean noMoreData = false;
     private boolean hide = false;
+    private int type;
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_NOMORE_DATA = 2;
 
-    public BooksListAdapter(Context context){
-        this.mContext=context;
+    public BooksListAdapter(Context context,int type){
+        this.mContext = context;
+        this.type = type;
     }
 
     public void setmBooksData(List<BookModel> data){
@@ -82,11 +83,15 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ItemHolder) holder).bkname.setText(mBooksData.get(position).bookName);
             ((ItemHolder) holder).desc.setText(mBooksData.get(position).desc);
             Picasso.with(mContext).load(mBooksData.get(position).bookImgUrl)
-                    .resize(155, 185)
+                    .resize(dip2px(116), dip2px(153))
                     .centerCrop()
                     .into(((ItemHolder) holder).img);
         }
 
+    }
+    private int dip2px(float dpValue) {
+        final float scale = mContext.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
     public void setNoMoreData(boolean noMoreData){
         this.noMoreData = noMoreData;

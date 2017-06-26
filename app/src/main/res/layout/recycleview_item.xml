@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     >
 
         <LinearLayout
-
             android:padding="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <ImageView
+                android:background="@drawable/shape_gray_square_bg"
                 android:src="@mipmap/ic_launcher"
                 android:id="@+id/item_image"
                 android:scaleType="fitXY"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:padding="3dp"
+                android:layout_width="116dp"
+                android:layout_height="153dp" />
             <LinearLayout
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
