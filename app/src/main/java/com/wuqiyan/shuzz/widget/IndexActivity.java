@@ -1,100 +1,110 @@
 package com.wuqiyan.shuzz.widget;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.wuqiyan.shuzz.R;
-import com.wuqiyan.shuzz.comm.Constant;
 
-public class IndexActivity extends AppCompatActivity {
+/**
+ * Created by wuqiyan on 2017/6/26.
+ */
 
+public class IndexActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener, View.OnClickListener {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private NavigationView navigationView;
+    private Toolbar mtoolbar;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private HomeFragment homeFragment;
 
-    private ViewPager mViewPager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_layout);
+        setContentView(R.layout.index_layout);
+        homeFragment = new HomeFragment();
 
 
+        //navgationview
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setItemIconTintList(null);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
+        initView();
 
     }
 
+    public void initView() {
+        //显示toolbar
+        mtoolbar = (Toolbar) findViewById(R.id.toolbar);
+        mtoolbar.setTitle("书籍");
+        setSupportActionBar(mtoolbar);
+        mtoolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+        //绑定侧边栏
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mtoolbar, R.string.drawer_open, R.string.drawer_close);
+        actionBarDrawerToggle.syncState();
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        //显示底部导航
+        BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
+        bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
+        bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
+        bottomNavigationBar.setBarBackgroundColor("#f5f6f5");
+        bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.ic_book_black_48dp, "书籍").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colorpurple))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_description_black_48dp, "文章").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colororange))
+                .setFirstSelectedPosition(0)
+                .initialise();
+
+        setDefaultFragment();
+
+        //底部导航监听事件
+        bottomNavigationBar.setTabSelectedListener(this);
+    }
 
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    //设置启动页
+    private void setDefaultFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.maindfragment, homeFragment).commit();
+    }
+    @Override
+    public void onClick(View v) {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+    }
+
+    @Override
+    public void onTabSelected(int i) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        switch (i) {
+            case 0:
+                mtoolbar.setTitle("书籍");
+                ft.replace(R.id.maindfragment, homeFragment).commit();
+                break;
+            case 1:
+                ft.replace(R.id.maindfragment, homeFragment).commit();
+                mtoolbar.setTitle("文章");
+                break;
+
         }
 
-        @Override
-        public Fragment getItem(int position) {
-            String type = null;
-            switch (position){
-                case 0:
-                    type = Constant.ANDROID;
-                    break;
-                case 1:
-                    type = Constant.PYTHON;
-                    break;
-                case 2:
-                    type = Constant.JAVASCRIPT;
-                    break;
-                case 3:
-                    type = Constant.HTML5;
-                    break;
-                case 4:
-                    type = Constant.LINUX;
-                    break;
-                case 5:
-                    type = Constant.CSHARP;
-                    break;
-                case 6:
-                    type = Constant.IOS;
-                    break;
-                case 7:
-                    type = Constant.JQUERY;
-                    break;
-                case 8:
-                    type = Constant.DB;
-                    break;
-                case 9:
-                    type = Constant.MACHINELEARN;
-                    break;
+    }
 
-            }
-            BookFragment fragment=new BookFragment();
-            Bundle args = new Bundle();
-            args.putString(Constant.BOOKTYPE, type);
-            fragment.setArguments(args);
-            return fragment;
-        }
+    @Override
+    public void onTabUnselected(int i) {
 
-        @Override
-        public int getCount() {
+    }
 
-            return 11;
-        }
+    @Override
+    public void onTabReselected(int i) {
 
     }
 }

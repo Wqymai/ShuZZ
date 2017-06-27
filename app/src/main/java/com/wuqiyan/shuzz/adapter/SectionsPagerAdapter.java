@@ -15,7 +15,7 @@ import com.wuqiyan.shuzz.widget.BookFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private String[] titles = new String[]{"Android","IOS","Java","Python","JavaScript","Html5","Linux","C#","Jquery","数据库","机器学习"};
+    private String[] titles = new String[]{"Android","Python","JavaScript","Html5","Linux","C#","IOS","Jquery","数据库","机器学习"};
     public int COUNT = titles.length;
     private Context context;
 

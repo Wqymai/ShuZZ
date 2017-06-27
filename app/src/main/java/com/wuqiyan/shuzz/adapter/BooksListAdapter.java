@@ -60,7 +60,7 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == TYPE_ITEM){
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycleview_item, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bookslist_item, parent, false);
             ItemHolder holder = new ItemHolder(v);
             return holder;
         }
@@ -82,13 +82,17 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (holder instanceof ItemHolder){
             ((ItemHolder) holder).bkname.setText(mBooksData.get(position).bookName);
             ((ItemHolder) holder).desc.setText(mBooksData.get(position).desc);
+
+
             Picasso.with(mContext).load(mBooksData.get(position).bookImgUrl)
-                    .resize(dip2px(116), dip2px(153))
+                    .resize(dip2px(80), dip2px(110))
                     .centerCrop()
                     .into(((ItemHolder) holder).img);
         }
 
     }
+
+
     private int dip2px(float dpValue) {
         final float scale = mContext.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);

@@ -17,8 +17,8 @@
                 android:id="@+id/item_image"
                 android:scaleType="fitXY"
                 android:padding="3dp"
-                android:layout_width="116dp"
-                android:layout_height="153dp" />
+                android:layout_width="80dp"
+                android:layout_height="110dp" />
             <LinearLayout
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
@@ -40,8 +40,6 @@
                     android:id="@+id/item_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
-
 
             </LinearLayout>
 
