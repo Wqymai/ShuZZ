@@ -5,6 +5,7 @@ import android.content.Context;
 import com.wuqiyan.shuzz.comm.Constant;
 import com.wuqiyan.shuzz.comm.SPUtils;
 import com.wuqiyan.shuzz.model.BookModel;
+import com.wuqiyan.shuzz.model.TagModel;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,6 +21,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_ANDROID;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_CSHARP;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_DB;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_HTML5;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_IOS;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_JAVASCRIPT;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_JQUERY;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_LINUX;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_MACHINELEARN;
+import static com.wuqiyan.shuzz.comm.Constant.ITURING_PYTHON;
 
 /**
  * Created by wuqiyan on 17/6/21.
@@ -98,6 +110,88 @@ public class IturingImpl{
 
     }
 
+    public void getIturingTags(){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.ITURING_BASEURL).build();
+        IturingApi ituringApi = retrofit.create(IturingApi.class);
+        Call<ResponseBody> call = ituringApi.getIturingTags();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    List<TagModel> tagList = parseIturingTags(response.body().string());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+
+            }
+        });
+    }
+
+
+    private List<TagModel> parseIturingTags(String responseBody){
+        List<TagModel> list=new ArrayList<>();
+        try {
+            Document doc_content = Jsoup.parse(responseBody);
+            Elements ele = doc_content.select(".col-md-3 .block:not(.hot-tags) .tags a");
+            if (!ele.isEmpty()){
+                    TagModel tagModel=new TagModel();
+
+                    for (Element e :ele){
+                        tagModel.setTagId(e.attr("tagid"));
+                        tagModel.setTagName(e.text());
+                        if (!checkTags(tagModel)){
+                            list.add(tagModel);
+                        }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    private boolean checkTags(TagModel tag){
+        boolean alr = false;
+        switch (Integer.parseInt(tag.getTagId())){
+            case ITURING_ANDROID:
+                alr = true;
+                break;
+            case ITURING_PYTHON:
+                alr = true;
+                break;
+            case ITURING_JAVASCRIPT:
+                alr = true;
+                break;
+            case ITURING_HTML5:
+                alr = true;
+                break;
+            case ITURING_LINUX:
+                alr = true;
+                break;
+            case ITURING_CSHARP:
+                alr = true;
+                break;
+            case ITURING_IOS:
+                alr = true;
+                break;
+            case ITURING_JQUERY:
+                alr = true;
+                break;
+            case ITURING_DB:
+                alr = true;
+                break;
+            case ITURING_MACHINELEARN:
+                alr = true;
+                break;
+        }
+        return alr;
+    }
+
     private int getBookNumberInIturing(String type){
         int num = -1;
         if (type == null){
@@ -105,7 +199,7 @@ public class IturingImpl{
         }
         switch (type){
             case Constant.ANDROID:
-                num = Constant.ITURING_ANDROID;
+                num = ITURING_ANDROID;
                 break;
             case Constant.PYTHON:
                 num = Constant.ITURING_PYTHON;

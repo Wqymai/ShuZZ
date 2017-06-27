@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //                    }
 //                });
-//                ituring.getAndroidPages(Constant.ITURING_ANDROID);
+//                ituring.getIturingTags();
             }
         });
 

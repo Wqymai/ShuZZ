@@ -20,6 +20,7 @@ public interface IturingApi {
     @GET("tag/{type}")
     Call<ResponseBody> getIturingPages(@Path("type") int type);
 
-
+    @Headers("User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
+    @GET("tag/49")
     Call<ResponseBody> getIturingTags();
 }
