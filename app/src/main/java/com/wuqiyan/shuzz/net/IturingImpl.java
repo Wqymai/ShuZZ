@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.wuqiyan.shuzz.comm.Constant;
 import com.wuqiyan.shuzz.comm.SPUtils;
+import com.wuqiyan.shuzz.dao.TagsDao;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.model.TagModel;
 
@@ -119,7 +120,7 @@ public class IturingImpl{
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     List<TagModel> tagList = parseIturingTags(response.body().string());
-
+                    TagsDao.insertTags(tagList);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -139,20 +140,19 @@ public class IturingImpl{
             Document doc_content = Jsoup.parse(responseBody);
             Elements ele = doc_content.select(".col-md-3 .block:not(.hot-tags) .tags a");
             if (!ele.isEmpty()){
-                    TagModel tagModel=new TagModel();
-
+                    TagModel tagModel;
                     for (Element e :ele){
+                        tagModel=new TagModel();
                         tagModel.setTagId(e.attr("tagid"));
                         tagModel.setTagName(e.text());
                         if (!checkTags(tagModel)){
                             list.add(tagModel);
                         }
-                }
+                    }
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-
         return list;
     }
     private boolean checkTags(TagModel tag){

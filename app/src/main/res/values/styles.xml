@@ -15,15 +15,13 @@
         <item name="color">@android:color/white</item>
     </style>
 
-    <style name="ToolBarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="ToolBarTheme" parent="@style/ThemeOverlay.AppCompat.Light">
         <item name="actionMenuTextColor">#fff</item>
-        <item name="actionMenuTextAppearance">@style/AppTheme.actionMenuTextSize</item>
+        <item name="colorControlNormal">#fff</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="AppTheme.actionMenuTextSize" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Menu">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">normal</item>
-    </style>
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

@@ -9,7 +9,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -19,7 +21,7 @@ import com.wuqiyan.shuzz.R;
  * Created by wuqiyan on 2017/6/26.
  */
 
-public class IndexActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener, View.OnClickListener {
+public class IndexActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener, View.OnClickListener,Toolbar.OnMenuItemClickListener {
 
     private NavigationView navigationView;
     private Toolbar mtoolbar;
@@ -33,7 +35,6 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index_layout);
         homeFragment = new HomeFragment();
-
 
         //navgationview
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -49,6 +50,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         mtoolbar.setTitle("书籍");
         setSupportActionBar(mtoolbar);
         mtoolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        mtoolbar.setOnMenuItemClickListener(this);
 
         //绑定侧边栏
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -114,4 +116,20 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         getMenuInflater().inflate(R.menu.menu_main2, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.add_tag){
+            Toast.makeText(IndexActivity.this,"hello",Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
 }
