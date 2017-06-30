@@ -20,4 +20,6 @@
 
     <string name="drawer_open">Drawer Open</string>
     <string name="drawer_close">Drawer Close</string>
+    <string name="already_tag">已显示标签(拖动可排序):</string>
+    <string name="add_tag">可添加标签(点击可添加):</string>
 </resources>

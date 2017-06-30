@@ -20,6 +20,7 @@
         </activity>
 
         <activity android:name=".widget.IndexActivity"></activity>
+        <activity android:name=".widget.TagActivity"></activity>
 
     </application>
 

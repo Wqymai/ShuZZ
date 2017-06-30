@@ -5,19 +5,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.List;
+
 /**
  * Created by wuqiyan on 2017/6/26.
  */
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private String[] titles = new String[]{"Android","Python","JavaScript","Html5","Linux","C#","IOS","Jquery","数据库","机器学习"};
-    public int COUNT = titles.length;
+//    private String[] titles = new String[]{"Android","Python","JavaScript","Html5","Linux","C#","IOS","Jquery","数据库","机器学习"};
+//    public int COUNT = titles.length;
     private Context context;
+    private List<String> tags;
 
-
-    public SectionsPagerAdapter(FragmentManager fm, Context context){
+    public SectionsPagerAdapter(FragmentManager fm,List<String> tags ,Context context){
         super(fm);
+        this.tags = tags;
         this.context = context;
     }
 
@@ -62,17 +65,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 //        args.putString(Constant.BOOKTYPE, type);
 //        fragment.setArguments(args);
 
-        String str = titles[position].toLowerCase();
+        String str = tags.get(position);
         return new Fragment();
     }
 
     @Override
     public int getCount() {
-        return COUNT;
+        return tags.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles[position];
+        return tags.get(position);
     }
 }

@@ -1,5 +1,6 @@
 package com.wuqiyan.shuzz.widget;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -11,11 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.wuqiyan.shuzz.R;
+import com.wuqiyan.shuzz.dao.TagsDao;
+
+import java.util.List;
 
 /**
  * Created by wuqiyan on 2017/6/26.
@@ -28,12 +31,15 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private HomeFragment homeFragment;
+    private List<String> tags;
+    private final int REQUEST_CODE = 100;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index_layout);
+        tags= TagsDao.queryTagsByState(0);
         homeFragment = new HomeFragment();
 
         //navgationview
@@ -68,7 +74,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
                 .setFirstSelectedPosition(0)
                 .initialise();
 
-        setDefaultFragment();
+        setDefaultFragment(tags);
 
         //底部导航监听事件
         bottomNavigationBar.setTabSelectedListener(this);
@@ -76,7 +82,8 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
 
     //设置启动页
-    private void setDefaultFragment() {
+    private void setDefaultFragment(List<String> tagsList) {
+        homeFragment.setTags(tagsList);
         getSupportFragmentManager().beginTransaction().replace(R.id.maindfragment, homeFragment).commit();
     }
     @Override
@@ -121,7 +128,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.add_tag){
-            Toast.makeText(IndexActivity.this,"hello",Toast.LENGTH_SHORT).show();
+            startActivityForResult(new Intent(IndexActivity.this,TagActivity.class),REQUEST_CODE);
         }
         return false;
     }
@@ -131,5 +138,14 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         super.onResume();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.remove(homeFragment);
+        HomeFragment newHomeFrag=new HomeFragment();
+        newHomeFrag.setTags(newTagsList);
+        ft.replace(R.id.maindfragment,newHomeFrag).commitAllowingStateLoss();
+    }
 
 }

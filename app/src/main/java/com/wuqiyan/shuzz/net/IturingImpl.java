@@ -134,6 +134,10 @@ public class IturingImpl{
     }
 
 
+
+
+
+
     private List<TagModel> parseIturingTags(String responseBody){
         List<TagModel> list=new ArrayList<>();
         try {
@@ -143,51 +147,67 @@ public class IturingImpl{
                     TagModel tagModel;
                     for (Element e :ele){
                         tagModel=new TagModel();
-                        tagModel.setTagId(e.attr("tagid"));
-                        tagModel.setTagName(e.text());
+                        tagModel.setTagId(Long.parseLong(e.attr("tagid")));
+                        tagModel.setTagName(e.text().toLowerCase());
+                        tagModel.setTagState(1);
                         if (!checkTags(tagModel)){
                             list.add(tagModel);
                         }
+
                     }
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        return list;
+        //添加默认显示的
+        return addDefaultTags(list);
+    }
+
+    private List<TagModel> addDefaultTags(List<TagModel> tagsList){
+        tagsList.add(new TagModel((long) 49,"android",0));
+        tagsList.add(new TagModel((long) 11,"python",0));
+        tagsList.add(new TagModel((long) 6,"javascript",0));
+        tagsList.add(new TagModel((long) 238,"html5",0));
+        tagsList.add(new TagModel((long) 25,"linux",0));
+        tagsList.add(new TagModel((long) 35,"c#",0));
+        tagsList.add(new TagModel((long) 367,"ios",0));
+        tagsList.add(new TagModel((long) 283,"jquery",0));
+        tagsList.add(new TagModel((long) 90,"数据库",0));
+        tagsList.add(new TagModel((long) 69,"机器学习",0));
+        return tagsList;
     }
     private boolean checkTags(TagModel tag){
         boolean alr = false;
-        switch (Integer.parseInt(tag.getTagId())){
-            case ITURING_ANDROID:
-                alr = true;
-                break;
-            case ITURING_PYTHON:
-                alr = true;
-                break;
-            case ITURING_JAVASCRIPT:
-                alr = true;
-                break;
-            case ITURING_HTML5:
-                alr = true;
-                break;
-            case ITURING_LINUX:
-                alr = true;
-                break;
-            case ITURING_CSHARP:
-                alr = true;
-                break;
-            case ITURING_IOS:
-                alr = true;
-                break;
-            case ITURING_JQUERY:
-                alr = true;
-                break;
-            case ITURING_DB:
-                alr = true;
-                break;
-            case ITURING_MACHINELEARN:
-                alr = true;
-                break;
+        if (tag.getTagId().equals((long) ITURING_ANDROID)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_PYTHON)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_JAVASCRIPT)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_HTML5)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_LINUX)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_CSHARP)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_IOS)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_JQUERY)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_DB)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) ITURING_MACHINELEARN)) {
+            alr = true;
+
         }
         return alr;
     }
