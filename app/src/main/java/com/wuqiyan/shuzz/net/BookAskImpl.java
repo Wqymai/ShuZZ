@@ -75,7 +75,7 @@ public class BookAskImpl {
     }
 
     private List<BookModel> parseBookInfos(String responseBody){
-        
+
         List<BookModel> models = new ArrayList<>();
         try{
             Document document = Jsoup.parse(responseBody);

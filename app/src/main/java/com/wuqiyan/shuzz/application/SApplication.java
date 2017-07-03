@@ -41,7 +41,6 @@ public class SApplication extends Application {
                         .build());
 
        if (!TagsDao.hasTags()){
-
            new IturingImpl(this).getIturingTags();
        }
        //设置picasso请求https
