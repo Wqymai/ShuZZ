@@ -1,7 +1,5 @@
 package com.wuqiyan.shuzz.net;
 
-import android.util.Log;
-
 import com.wuqiyan.shuzz.comm.Constant;
 import com.wuqiyan.shuzz.model.BookModel;
 
@@ -11,9 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,7 +75,7 @@ public class BookAskImpl {
     }
 
     private List<BookModel> parseBookInfos(String responseBody){
-        Log.i("wxl", "response=" + responseBody);
+        
         List<BookModel> models = new ArrayList<>();
         try{
             Document document = Jsoup.parse(responseBody);
@@ -104,31 +100,6 @@ public class BookAskImpl {
         return models;
     }
 
-    //([\s\S]*?)[\|(.*?)\|(.*?)》]
-    private Map<String,String> matchInfo(String str){
-        Pattern p;
-        if (str.contains("|")){
-            p = Pattern.compile("([\\s\\S]*?)\\|(.*?)\\|(.*?)》");
-        }
-        else {
-            p = Pattern.compile("([\\s\\S]*?)》");
-        }
-
-
-        Map<String,String> map=new HashMap<>();
-        try {
-
-            Matcher m = p.matcher(str);
-            if (m.find()){
-                map.put("name",m.group(1));
-                map.put("author",m.group(2));
-                map.put("publish",m.group(3));
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return map;
-    }
 
     public  String delHTMLTag(String htmlStr){
         if (htmlStr ==null || htmlStr.equals("")){
