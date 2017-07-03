@@ -9,10 +9,12 @@ public class BookModel {
         public String bookName;
         public String author;
         public String desc;
+        public String publishingHouse;
+        public String contentUrl;
 
         @Override
         public String toString() {
-                return bookImgUrl+" "+ bookName+" "+author+" "+desc+"\n";
+                return bookImgUrl+" "+" "+contentUrl+ bookName+" "+author+" "+desc+" "+publishingHouse+"\n";
         }
 }
 

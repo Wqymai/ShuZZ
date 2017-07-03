@@ -6,6 +6,7 @@ package com.wuqiyan.shuzz.comm;
 
 public class Constant {
     public final static String ITURING_BASEURL="http://www.ituring.com.cn/";
+    public final static String BOOKASK_BASEURL="http://www.bookask.com/";
     public final static int ITURING_ANDROID = 49;
     public final static int ITURING_PYTHON = 11;
     public final static int ITURING_JAVASCRIPT = 6;

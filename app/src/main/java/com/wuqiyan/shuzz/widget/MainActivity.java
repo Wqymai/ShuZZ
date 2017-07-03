@@ -20,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TagActivity.class));
+                startActivity(new Intent(MainActivity.this, IndexActivity.class));
 //                IturingImpl ituring=new IturingImpl(getApplicationContext());
-//                ituring.getAndroid_Ituring(1);
+//                ituring.getIturingBook("49",1);
 //                ituring.setOnLoadBookListener(new OnLoadBookListener() {
 //                    @Override
 //                    public void onSuccess(List<BookModel> books) {
@@ -33,8 +33,34 @@ public class MainActivity extends AppCompatActivity {
 //                    public void onFailure(String error) {
 //
 //                    }
+//
+//                    @Override
+//                    public void onPageNext(boolean hasNext) {
+//
+//                    }
 //                });
 //                ituring.getIturingTags();
+
+//                BookAskImpl impl=new BookAskImpl();
+//                impl.requestBookAskInfo("ios",1);
+//                impl.setOnLoadBookListener(new OnLoadBookListener() {
+//                    @Override
+//                    public void onSuccess(List<BookModel> books) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(String error) {
+//                        System.out.println(error);
+//                    }
+//
+//                    @Override
+//                    public void onPageNext(boolean hasNext) {
+//
+//                    }
+//                });
+
+
             }
         });
 

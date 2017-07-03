@@ -18,12 +18,7 @@
         android:id="@+id/enter_tv"
     />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/save_fab"
-        app:fabSize="mini"
-        android:layout_gravity="right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
 
 
 </LinearLayout>

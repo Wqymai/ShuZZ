@@ -1,8 +1,11 @@
 package com.wuqiyan.shuzz.widget;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.view.View;
 import android.widget.Toast;
 
 import com.wuqiyan.shuzz.R;
@@ -29,8 +32,6 @@ public class TagActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tag_layout);
 
-
-
         List<String> strs0 = TagsDao.queryTagsByState(0);
         temp_tags = strs0;
         tagContainer_already = (TagContainerLayout) findViewById(R.id.tagcontainer_already);
@@ -54,10 +55,6 @@ public class TagActivity extends Activity {
                     //更新数据库
                     TagsDao.updateTagsState(temp_tags.get(position),1);
 
-                    //重新加载可添加的标签
-                    List<String> strs1= TagsDao.queryTagsByState(1);
-                    tagContainer_add.setTags(strs1);
-
                     temp_tags = tagContainer_already.getTags();
 
                 }
@@ -72,16 +69,15 @@ public class TagActivity extends Activity {
             @Override
             public void onTagClick(int position, String text) {
                 if (tagContainer_already.getTags().contains(text)){
-                    Toast.makeText(TagActivity.this,"不能添加，已存在",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TagActivity.this,"重复添加",Toast.LENGTH_SHORT).show();
                 }
                 else {
-                   tagContainer_already.addTag(text);
+                    tagContainer_already.addTag(text);
 
                     //更新数据库
                     TagsDao.updateTagsState(text,0);
-                    //重新加载已显示的标签
-                    List<String> strs0 = TagsDao.queryTagsByState(0);
-                    tagContainer_already.setTags(strs0);
+
+                    tagContainer_add.removeTag(position);
 
                 }
             }
@@ -97,17 +93,17 @@ public class TagActivity extends Activity {
             }
         });
 
-//        FloatingActionButton getTags= (FloatingActionButton) findViewById(R.id.save_fab);
-//        getTags.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                List<String> tagsList = tagContainer_already.getTags();
-//                Intent intent=new Intent();
-//                intent.putStringArrayListExtra("NEW_BOOK_TAGS", (ArrayList<String>) tagsList);
-//                setResult(0,intent);
-//                finish();
-//            }
-//        });
+        FloatingActionButton getTags= (FloatingActionButton) findViewById(R.id.save_fab);
+        getTags.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> tagsList = tagContainer_already.getTags();
+                Intent intent=new Intent();
+                intent.putStringArrayListExtra("NEW_BOOK_TAGS", (ArrayList<String>) tagsList);
+                setResult(0,intent);
+                finish();
+            }
+        });
 
     }
 }

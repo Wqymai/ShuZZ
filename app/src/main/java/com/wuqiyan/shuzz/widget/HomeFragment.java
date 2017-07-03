@@ -58,9 +58,4 @@ public class HomeFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        System.out.println("Fragment的状态="+hidden);
-    }
 }

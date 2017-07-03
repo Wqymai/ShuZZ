@@ -11,4 +11,5 @@ import java.util.List;
 public interface OnLoadBookListener {
     void onSuccess(List<BookModel> books);
     void onFailure(String error);
+    void onPageNext(boolean hasNext);
 }

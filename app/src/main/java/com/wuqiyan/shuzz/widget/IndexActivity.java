@@ -143,7 +143,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.remove(homeFragment);
-        HomeFragment newHomeFrag=new HomeFragment();
+        HomeFragment newHomeFrag = new HomeFragment();
         newHomeFrag.setTags(newTagsList);
         ft.replace(R.id.maindfragment,newHomeFrag).commitAllowingStateLoss();
     }

@@ -96,6 +96,7 @@ public class IturingImpl{
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
+                    System.out.println(response.body().string());
                     List<BookModel> bookList = parseIturingBook(response.body().string());
                     onLoadBookListener.onSuccess(bookList);
                 } catch (IOException e) {
@@ -170,8 +171,8 @@ public class IturingImpl{
         tagsList.add(new TagModel((long) 238,"html5",0));
         tagsList.add(new TagModel((long) 25,"linux",0));
         tagsList.add(new TagModel((long) 35,"c#",0));
-        tagsList.add(new TagModel((long) 367,"ios",0));
-        tagsList.add(new TagModel((long) 283,"jquery",0));
+//        tagsList.add(new TagModel((long) 367,"ios",0));
+//        tagsList.add(new TagModel((long) 283,"jquery",0));
         tagsList.add(new TagModel((long) 90,"数据库",0));
         tagsList.add(new TagModel((long) 69,"机器学习",0));
         return tagsList;

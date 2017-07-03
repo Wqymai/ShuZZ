@@ -87,6 +87,8 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             Picasso.with(mContext).load(mBooksData.get(position).bookImgUrl)
                     .resize(dip2px(80), dip2px(110))
                     .centerCrop()
+                    .placeholder(R.mipmap.imgloading)
+                    .error(R.mipmap.imghold)
                     .into(((ItemHolder) holder).img);
         }
 

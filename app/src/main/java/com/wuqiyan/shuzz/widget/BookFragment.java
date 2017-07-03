@@ -13,12 +13,9 @@ import android.view.ViewGroup;
 
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.adapter.BooksListAdapter;
-import com.wuqiyan.shuzz.comm.Constant;
-import com.wuqiyan.shuzz.comm.SPUtils;
 import com.wuqiyan.shuzz.model.BookModel;
-import com.wuqiyan.shuzz.net.IturingImpl;
+import com.wuqiyan.shuzz.net.BookAskImpl;
 import com.wuqiyan.shuzz.net.OnLoadBookListener;
-import com.wuqiyan.shuzz.net.OnLoadPagesListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,25 +24,32 @@ import java.util.List;
  * Created by wuqiyan on 2017/6/19.
  */
 
-public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener,OnLoadPagesListener{
+public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener{
 
     private RecyclerView mRecyclerView;
     private List<BookModel> mDatas=new ArrayList<>();
     private BooksListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeLayout;
     private LinearLayoutManager mLayoutManager;
-    IturingImpl ituring;
-    private int firstPage = 0;
+    private BookAskImpl bookAskImpl;
     private int currPage = 0;
-    private int TotalPage;
-    String type;
+    private int firstPage = 1;
 
+    private String kw;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            type = getArguments().getString(Constant.BOOKTYPE);
+
+
+            currPage = firstPage;
+            kw = getArguments().getString("kw");
 
             View  rootView = inflater.inflate(R.layout.fragment_section,container,false);
             mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.id_swipe_ly);
@@ -53,13 +57,13 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             mSwipeLayout.setRefreshing(true);
             mSwipeLayout.setOnRefreshListener(this);
 
+            if (getUserVisibleHint()){
+                bookAskImpl = new BookAskImpl();
+                bookAskImpl.requestBookAskInfo(kw,firstPage);
+                bookAskImpl.setOnLoadBookListener(this);
+            }
 
-            ituring = new IturingImpl(getContext());
-            checkFirstEnter();
-            ituring.getIturingBook(type,currPage);
-            ituring.setOnLoadBookListener(this);
             mAdapter = new BooksListAdapter(getContext(),1);
-
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycleview);
             mRecyclerView.setLayoutManager(mLayoutManager);
@@ -85,24 +89,8 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItem + 1 == mAdapter.getItemCount()){
-                int newPage = currPage+1;
-                if (newPage < TotalPage){
-                    ituring.getIturingBook(type,newPage);
-                    currPage++;
-                }
-                else {
-                    mAdapter.setNoMoreData(true);
-                    mAdapter.notifyDataSetChanged();
-                    Handler handler=new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
 
-                            mAdapter.setHide(true);
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    },2000);
-                }
+                bookAskImpl.requestBookAskInfo(kw,currPage);
             }
         }
 
@@ -112,6 +100,7 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onSuccess(List<BookModel> books) {
+
         mSwipeLayout.setRefreshing(false);
         mDatas.addAll(books);
         mAdapter.setmBooksData(mDatas);
@@ -123,26 +112,28 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override
+    public void onPageNext(boolean hasNext) {
+        if (hasNext){
+            currPage = currPage+1;
+        }
+        else {
+            mAdapter.setNoMoreData(true);
+            mAdapter.notifyDataSetChanged();
+            Handler handler=new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.setHide(true);
+                    mAdapter.notifyDataSetChanged();
+                }
+            },2000);
+        }
+    }
+
+
+    @Override
     public void onRefresh() {
-      ituring.getIturingBook(type,firstPage);
+        bookAskImpl.requestBookAskInfo(kw,firstPage);
     }
 
-    @Override
-    public void onSuccess(int pages) {
-        this.TotalPage = pages;
-    }
-
-    @Override
-    public void onFailure() {
-
-    }
-    private void   checkFirstEnter(){
-       String pages = new SPUtils(getContext(),"conf").getString(type,"-1");
-       if (pages.equals("-1")){
-           ituring.getIturingPages(type);
-           ituring.setOnLoadPagesListener(this);
-       }else {
-           this.TotalPage = Integer.parseInt(pages);
-       }
-    }
 }
