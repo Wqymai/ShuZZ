@@ -3,9 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.wuqiyan.shuzz.widget.IndexActivity">
 
+    <!--<item-->
+        <!--android:id="@+id/add_tag"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="添加标签"-->
+        <!--app:showAsAction="never" />-->
+
     <item
+        android:title="add_tag"
         android:id="@+id/add_tag"
         android:orderInCategory="100"
-        android:title="添加标签"
-        app:showAsAction="never" />
+        android:icon="@mipmap/ic_add_white_48dp"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/search"
+        android:orderInCategory="60"
+        android:title="action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -16,7 +16,6 @@
             android:icon="@mipmap/ic_launcher"
             android:title="个人收藏"></item>
 
-
     </group>
     <group
         android:id="@+id/grp2"
