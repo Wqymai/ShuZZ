@@ -17,6 +17,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.dao.TagsDao;
+import com.wuqiyan.shuzz.fragment.HomeFragment;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index_layout);
-        tags= TagsDao.queryTagsByState(0);
+        tags = TagsDao.queryTagsByState(0);
         homeFragment = new HomeFragment();
 
         //navgationview
@@ -70,7 +71,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         bottomNavigationBar.setBarBackgroundColor("#f5f6f5");
         bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.ic_book_black_48dp, "书籍").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colorpurple))
-                .addItem(new BottomNavigationItem(R.mipmap.ic_description_black_48dp, "文章").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colororange))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_description_black_48dp, "搜索").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colororange))
                 .setFirstSelectedPosition(0)
                 .initialise();
 
@@ -101,7 +102,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
                 break;
             case 1:
                 ft.replace(R.id.maindfragment, homeFragment).commit();
-                mtoolbar.setTitle("文章");
+                mtoolbar.setTitle("搜索");
                 break;
 
         }

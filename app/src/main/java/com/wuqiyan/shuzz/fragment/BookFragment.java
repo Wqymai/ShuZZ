@@ -1,9 +1,9 @@
-package com.wuqiyan.shuzz.widget;
+package com.wuqiyan.shuzz.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +16,7 @@ import com.wuqiyan.shuzz.adapter.BooksListAdapter;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.net.BookAskImpl;
 import com.wuqiyan.shuzz.net.OnLoadBookListener;
+import com.wuqiyan.shuzz.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,28 +25,25 @@ import java.util.List;
  * Created by wuqiyan on 2017/6/19.
  */
 
-public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener{
+public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener,OnLoadBookListener{
 
     private RecyclerView mRecyclerView;
     private List<BookModel> mDatas=new ArrayList<>();
     private BooksListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeLayout;
     private LinearLayoutManager mLayoutManager;
+    private FloatingActionButton backTop;
     private BookAskImpl bookAskImpl;
     private int currPage = 0;
     private int firstPage = 1;
-
     private String kw;
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-    }
+
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
 
 
             currPage = firstPage;
@@ -57,12 +55,6 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             mSwipeLayout.setRefreshing(true);
             mSwipeLayout.setOnRefreshListener(this);
 
-            if (getUserVisibleHint()){
-                bookAskImpl = new BookAskImpl();
-                bookAskImpl.requestBookAskInfo(kw,firstPage);
-                bookAskImpl.setOnLoadBookListener(this);
-            }
-
             mAdapter = new BooksListAdapter(getContext(),1);
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycleview);
@@ -71,6 +63,15 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
             mRecyclerView.addOnScrollListener(mOnScrollListener);
 
+            backTop = (FloatingActionButton) rootView.findViewById(R.id.backTop_fab);
+            backTop.hide();
+            backTop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mRecyclerView.scrollToPosition(0);
+                    backTop.hide();
+                }
+            });
             return  rootView;
 
     }
@@ -78,10 +79,23 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private RecyclerView.OnScrollListener mOnScrollListener=new RecyclerView.OnScrollListener() {
 
         private int lastVisibleItem;
+        private int firstVisibleItem;
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+            firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+            if (dy < 0 ){//向下滑
+                if (firstVisibleItem == 0){
+                    backTop.hide();
+                }
+                else {
+                    backTop.show();
+                }
+            }
+            if (dy > 0){//向上滑
+                backTop.hide();
+            }
         }
 
         @Override
@@ -114,7 +128,7 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onPageNext(boolean hasNext) {
         if (hasNext){
-            currPage = currPage+1;
+            currPage = currPage + 1;
         }
         else {
             mAdapter.setNoMoreData(true);
@@ -136,4 +150,15 @@ public class BookFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         bookAskImpl.requestBookAskInfo(kw,firstPage);
     }
 
+    @Override
+    protected void onFragmentVisibleChange(boolean isVisible) {
+
+    }
+
+    @Override
+    protected void onFragmentFirstVisible() {
+        bookAskImpl = new BookAskImpl();
+        bookAskImpl.requestBookAskInfo(kw,firstPage);
+        bookAskImpl.setOnLoadBookListener(this);
+    }
 }

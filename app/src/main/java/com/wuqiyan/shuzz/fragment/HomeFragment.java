@@ -1,4 +1,4 @@
-package com.wuqiyan.shuzz.widget;
+package com.wuqiyan.shuzz.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,9 +24,7 @@ public class HomeFragment extends Fragment {
     private SectionsPagerAdapter adapter;
     private List<String> tags;
 
-    public List<String> getTags() {
-        return tags;
-    }
+
 
     public void setTags(List<String> tags) {
         this.tags = tags;

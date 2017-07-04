@@ -36,7 +36,8 @@ public class BookAskImpl {
 
     private int lastPage = 0;
     public void requestBookAskInfo(String kw, final int page){
-        if (lastPage == page){
+
+        if (lastPage == page && page!=1){
             return;
         }
         lastPage = page;
@@ -85,13 +86,13 @@ public class BookAskImpl {
             }
             for (Element div : eles_div){
                 BookModel book = new BookModel();
-                String bookName = div.select(".s-tittle a").text();
+                String bookName = delBookName(div.select(".s-tittle a").text());
                 book.bookImgUrl = div.select(".big-cover img").attr("src").replace("!b","!m");
                 book.bookName = delHTMLTag(bookName);
                 book.contentUrl = div.select(".s-tittle a").attr("href");
                 book.author = div.select(".s-tittle + div").text();
-                book.desc = div.select(".s-con").text();
-                book.publishingHouse =div.select("p:not(.s-con)").first().text() ;
+                book.desc = replaceBlank(div.select(".s-con").text());
+                book.publishingHouse =  div.select("p:not(.s-con)").first().text();
                 models.add(book);
             }
         }catch (Exception e){
@@ -100,9 +101,32 @@ public class BookAskImpl {
         return models;
     }
 
+    public  String replaceBlank(String str) {
+
+        String dest = "";
+        if (str!=null) {
+            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+            Matcher m = p.matcher(str);
+            dest = m.replaceAll("");
+        }
+        return dest.replace("简介：","");
+    }
+    public String delBookName(String name){
+        if (name == null || name.equals("")){
+            return name;
+        }
+        String str = name;
+        Pattern p = Pattern.compile("《(.*?)\\|(.*?)\\|(.*?)》");
+        Matcher m= p.matcher(name);
+        if (m.find()){
+            str = "《"+m.group(1)+"》";
+        }
+        String tempStr = replaceBlank(str.replace(": 英文","").replace("编委会编著.",""));
+        return tempStr;
+    }
 
     public  String delHTMLTag(String htmlStr){
-        if (htmlStr ==null || htmlStr.equals("")){
+        if (htmlStr == null || htmlStr.equals("")){
                 return htmlStr;
         }
         String regEx_script="<script[^>]*?>[\\s\\S]*?<\\/script>"; //定义script的正则表达式

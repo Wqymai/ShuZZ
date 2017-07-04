@@ -14,7 +14,7 @@ public class BookModel {
 
         @Override
         public String toString() {
-                return bookImgUrl+" "+" "+contentUrl+ bookName+" "+author+" "+desc+" "+publishingHouse+"\n";
+                return bookName+" "+author+" "+" "+publishingHouse+"\n";
         }
 }
 
