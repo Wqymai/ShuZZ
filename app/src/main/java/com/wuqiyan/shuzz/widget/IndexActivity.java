@@ -10,10 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -29,7 +27,7 @@ import java.util.List;
  * Created by wuqiyan on 2017/6/26.
  */
 
-public class IndexActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener, View.OnClickListener,Toolbar.OnMenuItemClickListener {
+public class IndexActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener, View.OnClickListener {
 
     private NavigationView navigationView;
     private Toolbar mtoolbar;
@@ -41,6 +39,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     private final int REQUEST_CODE = 100;
     private Fragment isFragment;
     private int menuType = 0;
+    private SearchView searchView;
 
 
     @Override
@@ -67,7 +66,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         mtoolbar.setTitle("书籍");
         setSupportActionBar(mtoolbar);
         mtoolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        mtoolbar.setOnMenuItemClickListener(this);
+//        mtoolbar.setOnMenuItemClickListener(this);
 
         //绑定侧边栏
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -80,8 +79,8 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         bottomNavigationBar.setBarBackgroundColor("#f5f6f5");
-        bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.ic_book_black_48dp, "书籍").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colorpurple))
-                .addItem(new BottomNavigationItem(R.mipmap.ic_description_black_48dp, "搜索").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colororange))
+        bottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.ic_book_black_48dp, "书籍").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_search_black_48dp, "搜索").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.colorPrimary))
                 .setFirstSelectedPosition(0)
                 .initialise();
 
@@ -119,12 +118,12 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
                 menuType = 1;
                 mtoolbar.setTitle("搜索");
                 if (searchFragment == null){
-                searchFragment = new SearchFragment();
+                  searchFragment = new SearchFragment();
                 }
                 switchContent(isFragment,searchFragment);
                 break;
         }
-        invalidateOptionsMenu();
+//        invalidateOptionsMenu();
 
     }
 
@@ -138,34 +137,36 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_item, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.add_item, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.clear();
-        MenuInflater inflater = getMenuInflater();
-        switch (menuType){
-            case 0:
-                inflater.inflate(R.menu.add_item, menu);
-                break;
-            case 1:
-                inflater.inflate(R.menu.search_item, menu);
-                break;
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        menu.clear();
+//        MenuInflater inflater = getMenuInflater();
+//        switch (menuType){
+//            case 0:
+//                inflater.inflate(R.menu.add_item, menu);
+//                break;
+//            case 1:
+//                inflater.inflate(R.menu.search_item, menu);
+//
+//                break;
+//        }
+//        return super.onPrepareOptionsMenu(menu);
+//    }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.add_tag){
-            startActivityForResult(new Intent(IndexActivity.this,TagActivity.class),REQUEST_CODE);
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onMenuItemClick(MenuItem item) {
+//        if (item.getItemId() == R.id.add_tag){
+//            startActivityForResult(new Intent(IndexActivity.this,TagActivity.class),REQUEST_CODE);
+//        }
+//
+//        return false;
+//    }
 
     @Override
     protected void onResume() {
@@ -174,12 +175,14 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.remove(homeFragment);
-        HomeFragment newHomeFrag = new HomeFragment();
-        newHomeFrag.setTags(newTagsList);
-        ft.replace(R.id.maindfragment,newHomeFrag).commitAllowingStateLoss();
+        if (data != null){
+            List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.remove(homeFragment);
+            HomeFragment newHomeFrag = new HomeFragment();
+            newHomeFrag.setTags(newTagsList);
+            ft.replace(R.id.maindfragment,newHomeFrag).commitAllowingStateLoss();
+        }
     }
 
     public void switchContent(Fragment from, Fragment to) {
@@ -195,5 +198,6 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
             }
         }
     }
+
 
 }

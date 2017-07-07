@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -49,12 +50,13 @@ public class TagActivity extends Activity {
 
             @Override
             public void onTagCrossClick(int position) {
-                if (position < tagContainer_already.getChildCount()) {
-                    tagContainer_already.removeTag(position);
 
+                if (position < tagContainer_already.getChildCount()) {
+                    //删除显示标签
+                    tagContainer_already.removeTag(position);
                     //更新数据库
                     TagsDao.updateTagsState(temp_tags.get(position),1);
-
+                    ////更新临时tags
                     temp_tags = tagContainer_already.getTags();
 
                 }
@@ -72,13 +74,17 @@ public class TagActivity extends Activity {
                     Toast.makeText(TagActivity.this,"重复添加",Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //添加显示标签
                     tagContainer_already.addTag(text);
 
                     //更新数据库
                     TagsDao.updateTagsState(text,0);
 
+                    //删除可添加标签
                     tagContainer_add.removeTag(position);
 
+                    //更新临时tags
+                    temp_tags = tagContainer_already.getTags();
                 }
             }
 
@@ -93,17 +99,38 @@ public class TagActivity extends Activity {
             }
         });
 
+        //保存按钮
         FloatingActionButton getTags= (FloatingActionButton) findViewById(R.id.save_fab);
         getTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<String> tagsList = tagContainer_already.getTags();
-                Intent intent=new Intent();
+                TagsDao.updateTagsState(tagsList);
+                Intent intent = new Intent();
                 intent.putStringArrayListExtra("NEW_BOOK_TAGS", (ArrayList<String>) tagsList);
                 setResult(0,intent);
                 finish();
             }
         });
+        //返回按钮
+        FloatingActionButton backFab = (FloatingActionButton) findViewById(R.id.back_fab);
+        backFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(0,null);
+                finish();
+            }
+        });
 
+    }
+
+    //处理返回键
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            setResult(0,null);
+            finish();
+        }
+        return false;
     }
 }

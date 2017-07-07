@@ -151,6 +151,7 @@ public class IturingImpl{
                         tagModel.setTagId(Long.parseLong(e.attr("tagid")));
                         tagModel.setTagName(e.text().toLowerCase());
                         tagModel.setTagState(1);
+                        tagModel.setTp(0l);
                         if (!checkTags(tagModel)){
                             list.add(tagModel);
                         }
@@ -165,16 +166,17 @@ public class IturingImpl{
     }
 
     private List<TagModel> addDefaultTags(List<TagModel> tagsList){
-        tagsList.add(new TagModel((long) 49,"android",0));
-        tagsList.add(new TagModel((long) 11,"python",0));
-        tagsList.add(new TagModel((long) 6,"javascript",0));
-        tagsList.add(new TagModel((long) 238,"html5",0));
-        tagsList.add(new TagModel((long) 25,"linux",0));
-        tagsList.add(new TagModel((long) 35,"c#",0));
-//        tagsList.add(new TagModel((long) 367,"ios",0));
-//        tagsList.add(new TagModel((long) 283,"jquery",0));
-        tagsList.add(new TagModel((long) 90,"数据库",0));
-        tagsList.add(new TagModel((long) 69,"机器学习",0));
+        long currTime = System.currentTimeMillis();
+        tagsList.add(new TagModel((long) 49,"android",0,currTime));
+        tagsList.add(new TagModel((long) 11,"python",0,currTime - 1000));
+        tagsList.add(new TagModel((long) 6,"javascript",0,currTime - 2000));
+        tagsList.add(new TagModel((long) 238,"html5",0,currTime - 3000));
+        tagsList.add(new TagModel((long) 25,"linux",0,currTime - 4000));
+        tagsList.add(new TagModel((long) 35,"c#",0,currTime - 5000));
+        tagsList.add(new TagModel((long) 367,"ios",0,currTime - 6000));
+        tagsList.add(new TagModel((long) 283,"jquery",0,currTime - 7000));
+//        tagsList.add(new TagModel((long) 90,"数据库",0,currTime - 8000));
+//        tagsList.add(new TagModel((long) 69,"机器学习",0,currTime - 9000));
         return tagsList;
     }
     private boolean checkTags(TagModel tag){

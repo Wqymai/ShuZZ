@@ -19,8 +19,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".widget.IndexActivity"></activity>
-        <activity android:name=".widget.TagActivity"></activity>
+        <activity android:name=".widget.IndexActivity"
+                  android:windowSoftInputMode="adjustPan"
+            ></activity>
+        <activity android:name=".widget.TagActivity"
+
+            ></activity>
 
     </application>
 

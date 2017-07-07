@@ -15,6 +15,15 @@ public class TagModel {
     private Long tagId;
     private String tagName;
     private int tagState;
+    private long tp;
+
+    public long getTp() {
+        return tp;
+    }
+
+    public void setTp(long tp) {
+        this.tp = tp;
+    }
 
     public Long getTagId() {
         return tagId;
@@ -33,10 +42,11 @@ public class TagModel {
     }
 
     @Keep
-    public TagModel(Long tagId, String tagName, int tagState) {
+    public TagModel(Long tagId, String tagName, int tagState,long tp) {
         this.tagId = tagId;
         this.tagName = tagName;
         this.tagState = tagState;
+        this.tp = tp;
     }
 
 
