@@ -23,12 +23,14 @@ import java.util.List;
  * Created by wuqiyan on 2017/6/26.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ViewPager.OnPageChangeListener {
 
     private View rootView;
     private SectionsPagerAdapter adapter;
     private List<String> tags;
     private final int REQUEST_CODE = 100;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
 
     @Override
@@ -52,21 +54,21 @@ public class HomeFragment extends Fragment {
     }
 
     public void initView(View rootView) {
-        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.container);
+        viewPager = (ViewPager) rootView.findViewById(R.id.container);
         //关键的一个知识点getChidFragmentManager
         adapter = new SectionsPagerAdapter(getChildFragmentManager(),tags, getContext());
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(10);
 
+
         //TabLayout
-        TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
+        tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        //显示当前那个标签页
-//        viewPager.setCurrentItem(1);
         tabLayout.setupWithViewPager(viewPager);
-    }
 
+
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.add_item,menu);
@@ -76,8 +78,37 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.add_tag){
-            startActivityForResult(new Intent(getActivity(),TagActivity.class),REQUEST_CODE);
+            Intent intent =new Intent(getActivity(),TagActivity.class);
+            intent.putExtra("currTag",tags.get(viewPager.getCurrentItem()));
+            startActivityForResult(intent,REQUEST_CODE);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (data != null){
+            List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
+            this.setTags(newTagsList);
+            int currIndex = data.getIntExtra("currIndex",0);
+            adapter.setTags(newTagsList);
+            viewPager.setCurrentItem(currIndex);
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

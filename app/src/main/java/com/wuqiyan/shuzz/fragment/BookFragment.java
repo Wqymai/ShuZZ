@@ -37,6 +37,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private int currPage = 0;
     private int firstPage = 1;
     private String kw;
+    private boolean hasNext = true;
 
 
 
@@ -103,8 +104,19 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItem + 1 == mAdapter.getItemCount()){
-
-                bookAskImpl.requestBookAskInfo(kw,currPage);
+                if (hasNext){
+                  bookAskImpl.requestBookAskInfo(kw,currPage);
+                }
+                else {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.setHide(true);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    },2000);
+                }
             }
         }
 
@@ -127,20 +139,13 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onPageNext(boolean hasNext) {
+        this.hasNext= hasNext;
         if (hasNext){
             currPage = currPage + 1;
         }
         else {
             mAdapter.setNoMoreData(true);
             mAdapter.notifyDataSetChanged();
-            Handler handler=new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.setHide(true);
-                    mAdapter.notifyDataSetChanged();
-                }
-            },2000);
         }
     }
 

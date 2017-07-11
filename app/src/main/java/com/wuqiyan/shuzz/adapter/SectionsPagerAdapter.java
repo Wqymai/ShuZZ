@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import com.wuqiyan.shuzz.fragment.BookFragment;
 
@@ -26,9 +27,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         this.context = context;
     }
 
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+        this.notifyDataSetChanged();
+
+    }
+
     @Override
     public Fragment getItem(int position) {
-        BookFragment fragment=new BookFragment();
+        Log.i("wqy","getItem="+tags.get(position));
+        BookFragment fragment = new BookFragment();
         Bundle args = new Bundle();
         args.putString("kw", tags.get(position));
         fragment.setArguments(args);

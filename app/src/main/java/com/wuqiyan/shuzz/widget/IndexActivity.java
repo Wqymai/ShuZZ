@@ -1,6 +1,5 @@
 package com.wuqiyan.shuzz.widget;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -173,28 +172,16 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         super.onResume();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null){
-            List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.remove(homeFragment);
-            HomeFragment newHomeFrag = new HomeFragment();
-            newHomeFrag.setTags(newTagsList);
-            ft.replace(R.id.maindfragment,newHomeFrag).commitAllowingStateLoss();
-        }
-    }
 
     public void switchContent(Fragment from, Fragment to) {
         if (isFragment != to) {
             isFragment = to;
             FragmentManager fm = getSupportFragmentManager();
-
             FragmentTransaction ft = fm.beginTransaction();
             if (!to.isAdded()) {
-                ft.hide(from).add(R.id.maindfragment, to).commit();
+                ft.hide(from).add(R.id.maindfragment, to).commitAllowingStateLoss();
             } else {
-                ft.hide(from).show(to).commit();
+                ft.hide(from).show(to).commitAllowingStateLoss();
             }
         }
     }

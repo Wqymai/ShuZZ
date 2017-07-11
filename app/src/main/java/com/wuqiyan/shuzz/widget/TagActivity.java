@@ -27,11 +27,14 @@ public class TagActivity extends Activity {
     TagContainerLayout tagContainer_already;
     TagContainerLayout tagContainer_add;
     List<String> temp_tags=new ArrayList<>();
+    String currTag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tag_layout);
+
+        currTag = getIntent().getStringExtra("currTag");
 
         List<String> strs0 = TagsDao.queryTagsByState(0);
         temp_tags = strs0;
@@ -108,10 +111,14 @@ public class TagActivity extends Activity {
                 TagsDao.updateTagsState(tagsList);
                 Intent intent = new Intent();
                 intent.putStringArrayListExtra("NEW_BOOK_TAGS", (ArrayList<String>) tagsList);
+                if (tagsList.contains(currTag)){
+                  intent.putExtra("currIndex",tagsList.indexOf(currTag));
+                }
                 setResult(0,intent);
                 finish();
             }
         });
+
         //返回按钮
         FloatingActionButton backFab = (FloatingActionButton) findViewById(R.id.back_fab);
         backFab.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +131,14 @@ public class TagActivity extends Activity {
 
     }
 
+    public int getIndex(List<String> tagsList,String tag){
+        for (int i=0;i<tagsList.size();i++){
+            if (tagsList.get(i).equals(tag)){
+                return i;
+            }
+        }
+        return 0;
+    }
     //处理返回键
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
