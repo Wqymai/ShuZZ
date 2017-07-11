@@ -90,9 +90,12 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
 
         if (data != null){
             List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
-            this.setTags(newTagsList);
+//            this.setTags(newTagsList);
             int currIndex = data.getIntExtra("currIndex",0);
-            adapter.setTags(newTagsList);
+//            adapter.setTags(newTagsList);
+
+            adapter = new SectionsPagerAdapter(getChildFragmentManager(),newTagsList, getContext());
+            viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(currIndex);
         }
     }
