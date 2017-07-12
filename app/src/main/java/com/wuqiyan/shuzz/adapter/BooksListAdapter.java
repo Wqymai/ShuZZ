@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.wuqiyan.shuzz.R;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by wuqiyan on 17/6/22.
  */
 
-public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
 
 
     private List<BookModel> mBooksData=new ArrayList<>();
@@ -31,6 +32,19 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_NOMORE_DATA = 2;
+
+
+
+    public static interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view ,BookModel bookModel);
+    }
+
+    private OnRecyclerViewItemClickListener mOnItemClickListener = null;
+
+
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+                 this.mOnItemClickListener = listener;
+    }
 
     public BooksListAdapter(Context context,int type){
         this.mContext = context;
@@ -62,6 +76,7 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (viewType == TYPE_ITEM){
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bookslist_item, parent, false);
             ItemHolder holder = new ItemHolder(v);
+            v.setOnClickListener(this);
             return holder;
         }
         else if (viewType == TYPE_FOOTER){
@@ -82,14 +97,19 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (holder instanceof ItemHolder){
             ((ItemHolder) holder).bkname.setText(mBooksData.get(position).bookName);
             ((ItemHolder) holder).desc.setText(mBooksData.get(position).desc);
-
-
             Picasso.with(mContext).load(mBooksData.get(position).bookImgUrl)
                     .resize(dip2px(80), dip2px(110))
                     .centerCrop()
                     .placeholder(R.mipmap.imgloading)
                     .error(R.mipmap.imghold)
                     .into(((ItemHolder) holder).img);
+            ((ItemHolder) holder).share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext,"收藏成功！",Toast.LENGTH_SHORT).show();
+                }
+            });
+            holder.itemView.setTag(mBooksData.get(position));
         }
 
     }
@@ -119,19 +139,31 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return mBooksData.size()+1;
         }
     }
+
+
+
+    @Override
+    public void onClick(View v) {
+          if (mOnItemClickListener != null){
+              mOnItemClickListener.onItemClick(v, (BookModel) v.getTag());
+          }
+    }
+
     class ItemHolder extends RecyclerView.ViewHolder
     {
 
         TextView bkname;
         TextView desc;
         ImageView img;
+        ImageView share;
 
         public ItemHolder(View view)
         {
             super(view);
             desc = (TextView) view.findViewById(R.id.item_desc);
-            bkname= (TextView) view.findViewById(R.id.item_bkname);
-            img= (ImageView) view.findViewById(R.id.item_image);
+            bkname = (TextView) view.findViewById(R.id.item_bkname);
+            img = (ImageView) view.findViewById(R.id.item_image);
+            share = (ImageView) view.findViewById(R.id.share_iv);
         }
     }
     class FootHolder extends RecyclerView.ViewHolder{
@@ -146,4 +178,7 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(itemView);
         }
     }
+
+
+
 }

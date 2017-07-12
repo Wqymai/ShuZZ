@@ -87,7 +87,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
                 .setFirstSelectedPosition(0)
                 .initialise();
 
-//        setDefaultFragment(tags);
+        setDefaultFragment(tags);
 
         //底部导航监听事件
         bottomNavigationBar.setTabSelectedListener(this);

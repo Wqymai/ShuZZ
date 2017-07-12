@@ -25,7 +25,7 @@
         android:paddingTop="5dp"
         android:textSize="13dp"
         android:textColor="@color/white"
-        android:text="点击头像登录"
+        android:text="点击头像使用QQ登录"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 </LinearLayout>

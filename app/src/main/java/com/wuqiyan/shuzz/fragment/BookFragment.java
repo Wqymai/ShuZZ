@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.adapter.BooksListAdapter;
@@ -57,6 +58,13 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             mSwipeLayout.setOnRefreshListener(this);
 
             mAdapter = new BooksListAdapter(getContext(),1);
+            mAdapter.setOnItemClickListener(new BooksListAdapter.OnRecyclerViewItemClickListener() {
+                @Override
+                public void onItemClick(View view, BookModel bookModel) {
+                    Toast.makeText(getContext(),"点击了item",Toast.LENGTH_SHORT).show();
+                }
+            });
+
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycleview);
             mRecyclerView.setLayoutManager(mLayoutManager);

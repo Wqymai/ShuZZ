@@ -11,13 +11,10 @@
             android:id="@+id/item_love"
             android:icon="@mipmap/ic_favorite_outline_grey600_48dp"
             android:title="我的收藏"></item>
+        <item
+            android:id="@+id/item_share"
+            android:icon="@mipmap/ic_open_in_new_grey600_48dp"
+            android:title="分享一下"
+            ></item>
     </group>
-    <!--<group-->
-        <!--android:id="@+id/grp3"-->
-        <!--android:checkableBehavior="single">-->
-        <!--<item-->
-            <!--android:icon="@mipmap/ic_launcher"-->
-            <!--android:id="@+id/logout"-->
-            <!--android:title="退出登录"></item>-->
-    <!--</group>-->
 </menu>
