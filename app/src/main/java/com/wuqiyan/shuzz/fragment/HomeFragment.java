@@ -85,20 +85,20 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (data != null){
-            List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
-//            this.setTags(newTagsList);
-            int currIndex = data.getIntExtra("currIndex",0);
-//            adapter.setTags(newTagsList);
-
-            adapter = new SectionsPagerAdapter(getChildFragmentManager(),newTagsList, getContext());
-            viewPager.setAdapter(adapter);
-            viewPager.setCurrentItem(currIndex);
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//
+//        if (data != null){
+//            List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
+////            this.setTags(newTagsList);
+//            int currIndex = data.getIntExtra("currIndex",0);
+////            adapter.setTags(newTagsList);
+//
+//            adapter = new SectionsPagerAdapter(getChildFragmentManager(),newTagsList, getContext());
+//            viewPager.setAdapter(adapter);
+//            viewPager.setCurrentItem(currIndex);
+//        }
+//    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

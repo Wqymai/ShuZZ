@@ -1,6 +1,8 @@
 package com.wuqiyan.shuzz.widget;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,7 +13,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -83,10 +87,29 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
                 .setFirstSelectedPosition(0)
                 .initialise();
 
-        setDefaultFragment(tags);
+//        setDefaultFragment(tags);
 
         //底部导航监听事件
         bottomNavigationBar.setTabSelectedListener(this);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.ivAvatar:
+                        Toast.makeText(IndexActivity.this,"头像",Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.item_read:
+                        Toast.makeText(IndexActivity.this,"read",Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.item_love:
+                        Toast.makeText(IndexActivity.this,"love",Toast.LENGTH_LONG).show();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -172,6 +195,17 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         super.onResume();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null){
+            List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.remove(homeFragment);
+            HomeFragment newHomeFrag = new HomeFragment();
+            newHomeFrag.setTags(newTagsList);
+            ft.replace(R.id.maindfragment,newHomeFrag).commitAllowingStateLoss();
+        }
+    }
 
     public void switchContent(Fragment from, Fragment to) {
         if (isFragment != to) {
