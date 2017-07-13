@@ -25,12 +25,13 @@ public class DetailActivity extends AppCompatActivity {
         final String cheeseName = "Android开发";
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        toolbar.setTitle(cheeseName);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(cheeseName);
+//        CollapsingToolbarLayout collapsingToolbar =
+//                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+//        collapsingToolbar.setTitle(cheeseName);
 
         loadBackdrop();
     }
