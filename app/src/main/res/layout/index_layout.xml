@@ -46,7 +46,6 @@
         android:layout_gravity="left"
         app:menu="@menu/drawer"
         app:theme="@style/NavMenuTextStyle"
-        app:headerLayout="@layout/nav_header"
         app:itemTextColor="#5e5e5e"
         android:background="@color/border"
         />

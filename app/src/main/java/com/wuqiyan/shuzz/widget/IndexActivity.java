@@ -15,6 +15,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -43,7 +45,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     private Fragment isFragment;
     private int menuType = 0;
     private SearchView searchView;
-
+    private View headerLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +60,9 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         //navgationview
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
+
+        //headerlayout
+        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
 
         initView();
 
@@ -97,19 +102,35 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.ivAvatar:
-                        Toast.makeText(IndexActivity.this,"头像",Toast.LENGTH_LONG).show();
-                        break;
                     case R.id.item_read:
                         Toast.makeText(IndexActivity.this,"read",Toast.LENGTH_LONG).show();
                         break;
                     case R.id.item_love:
                         Toast.makeText(IndexActivity.this,"love",Toast.LENGTH_LONG).show();
                         break;
+                    case R.id.item_share:
+                        break;
                 }
                 return true;
             }
         });
+
+        ImageView ivAvatar = (ImageView) headerLayout.findViewById(R.id.ivAvatar);
+        ivAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(IndexActivity.this,"登录1",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        TextView tvNickName = (TextView) headerLayout.findViewById(R.id.tvNickName);
+        tvNickName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(IndexActivity.this,"登录2",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
 

@@ -1,10 +1,12 @@
 package com.wuqiyan.shuzz.model;
 
+import java.io.Serializable;
+
 /**
  * Created by wuqiyan on 17/6/21.
  */
 
-public class BookModel {
+public class BookModel implements Serializable {
         public String bookImgUrl;
         public String bookName;
         public String author;

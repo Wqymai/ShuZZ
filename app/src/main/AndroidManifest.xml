@@ -25,6 +25,7 @@
         <activity android:name=".widget.TagActivity"
 
             ></activity>
+        <activity android:name=".widget.DetailActivity"></activity>
 
     </application>
 
