@@ -25,7 +25,9 @@
         <activity android:name=".widget.TagActivity"
 
             ></activity>
-        <activity android:name=".widget.DetailActivity"></activity>
+        <activity android:name=".widget.DetailActivity"
+            android:theme="@style/DetailStyle"
+            ></activity>
 
     </application>
 

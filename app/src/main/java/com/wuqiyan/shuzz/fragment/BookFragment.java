@@ -1,5 +1,6 @@
 package com.wuqiyan.shuzz.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import com.wuqiyan.shuzz.adapter.BooksListAdapter;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.net.BookAskImpl;
 import com.wuqiyan.shuzz.net.OnLoadBookListener;
+import com.wuqiyan.shuzz.widget.DetailActivity;
 import com.wuqiyan.shuzz.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
             currPage = firstPage;
@@ -62,6 +64,11 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 @Override
                 public void onItemClick(View view, BookModel bookModel) {
                     Toast.makeText(getContext(),"点击了item",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                    Bundle bundle =new Bundle();
+                    bundle.putSerializable("bookInfo",bookModel);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             });
 

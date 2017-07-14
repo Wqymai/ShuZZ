@@ -2,12 +2,14 @@ package com.wuqiyan.shuzz.net;
 
 import com.wuqiyan.shuzz.comm.Constant;
 import com.wuqiyan.shuzz.model.BookModel;
+import com.wuqiyan.shuzz.model.DetailModel;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -74,6 +76,52 @@ public class BookAskImpl {
             }
         });
     }
+
+    public void requestDetailAskInfo(String url, final OnLoadDetailListener listener){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.BOOKASK_BASEURL).build();
+        BookAskApi bookAskApi = retrofit.create(BookAskApi.class);
+        Call<ResponseBody> call = bookAskApi.getDetailAskInfo(url);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String html = response.body().string();
+                    listener.onDetail(parseDetailInfos(html));
+
+                } catch (IOException e) {
+                    listener.onFailure(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    private DetailModel parseDetailInfos(String responseBody){
+        DetailModel detailModel = new DetailModel();
+        try {
+            Document document = Jsoup.parse(responseBody);
+            Elements desc_ele = document.select("#descript p");
+            if (!desc_ele.isEmpty()){
+                detailModel.desc = desc_ele.html().replace("<br>","\n");
+            }
+            Elements catalog_ele = document.select("#catalog");
+            if (!catalog_ele.isEmpty()){
+                detailModel.catalog = catalog_ele.html().replace("<br>","\n");
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return detailModel;
+    }
+
+
 
     private List<BookModel> parseBookInfos(String responseBody){
 
