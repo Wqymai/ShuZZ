@@ -12,9 +12,11 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,12 +29,19 @@ import retrofit2.Retrofit;
 
 public class BookAskImpl {
 
+
     private OnLoadBookListener onLoadBookListener;
 
 
     public void setOnLoadBookListener(OnLoadBookListener onLoadBookListener){
         this.onLoadBookListener = onLoadBookListener;
     }
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(5000, TimeUnit.MILLISECONDS)
+            .writeTimeout(5000, TimeUnit.MILLISECONDS)
+            .readTimeout(10000, TimeUnit.MILLISECONDS)
+            .build();
 
 
 
@@ -43,7 +52,7 @@ public class BookAskImpl {
             return;
         }
         lastPage = page;
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.BOOKASK_BASEURL).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.BOOKASK_BASEURL).client(client).build();
         BookAskApi bookAskApi = retrofit.create(BookAskApi.class);
         Call<ResponseBody> call = bookAskApi.getBookAskInfo(kw,page);
         call.enqueue(new Callback<ResponseBody>() {
@@ -65,6 +74,7 @@ public class BookAskImpl {
                         onLoadBookListener.onPageNext(false);
                     }
                 } catch (Exception e) {
+                    onLoadBookListener.onFailure(e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -78,7 +88,7 @@ public class BookAskImpl {
     }
 
     public void requestDetailAskInfo(String url, final OnLoadDetailListener listener){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.BOOKASK_BASEURL).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.BOOKASK_BASEURL).client(client).build();
         BookAskApi bookAskApi = retrofit.create(BookAskApi.class);
         Call<ResponseBody> call = bookAskApi.getDetailAskInfo(url);
         call.enqueue(new Callback<ResponseBody>() {
@@ -144,6 +154,7 @@ public class BookAskImpl {
                 models.add(book);
             }
         }catch (Exception e){
+            onLoadBookListener.onFailure(e.getMessage());
             e.printStackTrace();
         }
         return models;

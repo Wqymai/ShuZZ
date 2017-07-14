@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.adapter.BooksListAdapter;
@@ -41,6 +41,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private int firstPage = 1;
     private String kw;
     private boolean hasNext = true;
+    private LinearLayout llLoadFail;
 
 
 
@@ -63,7 +64,6 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             mAdapter.setOnItemClickListener(new BooksListAdapter.OnRecyclerViewItemClickListener() {
                 @Override
                 public void onItemClick(View view, BookModel bookModel) {
-                    Toast.makeText(getContext(),"点击了item",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     Bundle bundle =new Bundle();
                     bundle.putSerializable("bookInfo",bookModel);
@@ -86,6 +86,16 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 public void onClick(View v) {
                     mRecyclerView.scrollToPosition(0);
                     backTop.hide();
+                }
+            });
+
+            llLoadFail = (LinearLayout) rootView.findViewById(R.id.ll_loadFail);
+            llLoadFail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSwipeLayout.setRefreshing(true);
+                    llLoadFail.setVisibility(View.GONE);
+
                 }
             });
             return  rootView;
@@ -149,7 +159,8 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onFailure(String error) {
-
+          mSwipeLayout.setRefreshing(false);
+          llLoadFail.setVisibility(View.VISIBLE);
     }
 
     @Override

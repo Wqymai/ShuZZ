@@ -5,10 +5,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,6 +32,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView tv_catalog;
     private Toolbar toolbar;
     private ProgressBar progressBar;
+    private LinearLayout llLoadFail;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,7 @@ public class DetailActivity extends AppCompatActivity {
         tv_catalog = (TextView) findViewById(R.id.detail_catalog);
         tv_desc = (TextView) findViewById(R.id.detail_desc);
         progressBar = (ProgressBar) findViewById(R.id.pb_detail);
+        llLoadFail = (LinearLayout) findViewById(R.id.ll_loadFail);
 
         loadBackdrop();
     }
@@ -68,7 +70,12 @@ public class DetailActivity extends AppCompatActivity {
         new BookAskImpl().requestDetailAskInfo(bookModel.contentUrl, new OnLoadDetailListener() {
             @Override
             public void onDetail(DetailModel model) {
-                if (model!= null){
+                if (model== null){
+                    progressBar.setVisibility(View.GONE);
+                    llLoadFail.setVisibility(View.VISIBLE);
+                }
+                else {
+
                     if (model.desc != null && !model.desc.equals("")){
 
                         progressBar.setVisibility(View.GONE);
@@ -86,7 +93,8 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String error) {
-
+                 progressBar.setVisibility(View.GONE);
+                llLoadFail.setVisibility(View.VISIBLE);
             }
         });
 

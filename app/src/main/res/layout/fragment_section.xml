@@ -28,5 +28,8 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_publish_grey600_48dp"
         />
+    <include layout="@layout/loadfail_layout"
+             android:visibility="gone"
+        ></include>
 
 </RelativeLayout>
