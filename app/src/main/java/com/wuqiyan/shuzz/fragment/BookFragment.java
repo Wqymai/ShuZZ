@@ -89,12 +89,14 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 }
             });
 
+            //点击加载失败重新加载
             llLoadFail = (LinearLayout) rootView.findViewById(R.id.ll_loadFail);
             llLoadFail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mSwipeLayout.setRefreshing(true);
                     llLoadFail.setVisibility(View.GONE);
+                    onRefresh();
 
                 }
             });
@@ -147,11 +149,10 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     };
 
-
-
     @Override
     public void onSuccess(List<BookModel> books) {
-
+        mAdapter.setNoMoreData(false);
+        mAdapter.setLoadFail(false);
         mSwipeLayout.setRefreshing(false);
         mDatas.addAll(books);
         mAdapter.setmBooksData(mDatas);
@@ -159,8 +160,17 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onFailure(String error) {
-          mSwipeLayout.setRefreshing(false);
-          llLoadFail.setVisibility(View.VISIBLE);
+
+          if (mAdapter.getItemCount() <= 0){
+
+              mSwipeLayout.setRefreshing(false);
+              llLoadFail.setVisibility(View.VISIBLE);
+
+          }
+          else {
+              mAdapter.setLoadFail(true);
+              mAdapter.notifyDataSetChanged();
+          }
     }
 
     @Override

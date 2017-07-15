@@ -27,11 +27,13 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context mContext;
     private boolean mShowFooter = true;
     private boolean noMoreData = false;
+    private boolean loadFail = false;
     private boolean hide = false;
     private int type;
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_NOMORE_DATA = 2;
+    private static final int TYPE_LOADFAIL = 3;
 
 
 
@@ -57,11 +59,15 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
+
     @Override
     public int getItemViewType(int position) {
         if (position+1 == getItemCount() && !hide){
             if (noMoreData){
                 return TYPE_NOMORE_DATA;
+            }
+            if (loadFail){
+                return TYPE_LOADFAIL;
             }
             return TYPE_FOOTER;
         }
@@ -84,9 +90,14 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             FootHolder holder = new FootHolder(v);
             return holder;
         }
-        else{
+        else if (viewType == TYPE_NOMORE_DATA){
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_nomore_data, parent, false);
             NODataHolder holder = new NODataHolder(v);
+            return holder;
+        }
+        else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_loadfail, parent, false);
+            LoadFailHolder holder = new LoadFailHolder(v);
             return holder;
         }
 
@@ -124,6 +135,10 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
     public void setHide(boolean hide){
         this.hide = hide;
+    }
+
+    public void setLoadFail(boolean loadFail) {
+        this.loadFail = loadFail;
     }
 
     @Override
@@ -175,6 +190,12 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     class NODataHolder extends RecyclerView.ViewHolder{
 
         public NODataHolder(View itemView) {
+            super(itemView);
+        }
+    }
+    class LoadFailHolder extends RecyclerView.ViewHolder{
+
+        public LoadFailHolder(View itemView) {
             super(itemView);
         }
     }
