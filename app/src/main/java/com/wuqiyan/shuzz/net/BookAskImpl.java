@@ -123,7 +123,10 @@ public class BookAskImpl {
             if (!catalog_ele.isEmpty()){
                 detailModel.catalog = catalog_ele.html().replace("<br>","\n");
             }
-
+            Elements recommend_ele = document.select("#edt_view p");
+            if (!recommend_ele.isEmpty()){
+                detailModel.recommend = recommend_ele.html().replace("<br>","\n");
+            }
 
         }catch (Exception e){
             e.printStackTrace();

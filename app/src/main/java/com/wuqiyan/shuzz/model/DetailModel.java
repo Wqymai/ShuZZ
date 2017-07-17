@@ -7,4 +7,5 @@ package com.wuqiyan.shuzz.model;
 public class DetailModel {
    public String desc;
    public String catalog;
+   public String recommend;
 }

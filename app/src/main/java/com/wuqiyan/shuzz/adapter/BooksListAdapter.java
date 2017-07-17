@@ -91,7 +91,7 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return holder;
         }
         else if (viewType == TYPE_NOMORE_DATA){
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_nomore_data, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_loadfail, parent, false);
             NODataHolder holder = new NODataHolder(v);
             return holder;
         }
@@ -121,6 +121,12 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
             holder.itemView.setTag(mBooksData.get(position));
+        }
+        if (holder instanceof  LoadFailHolder){
+            ((LoadFailHolder) holder).tv_fail.setText("数据加载失败");
+        }
+        if (holder instanceof  NODataHolder){
+            ((NODataHolder) holder).tv_fail.setText("数据全部加载完了");
         }
 
     }
@@ -189,14 +195,19 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
     class NODataHolder extends RecyclerView.ViewHolder{
 
+        TextView tv_fail;
         public NODataHolder(View itemView) {
             super(itemView);
+            tv_fail = (TextView) itemView.findViewById(R.id.tv_fail);
         }
     }
     class LoadFailHolder extends RecyclerView.ViewHolder{
 
+       TextView tv_fail;
+
         public LoadFailHolder(View itemView) {
             super(itemView);
+            tv_fail = (TextView) itemView.findViewById(R.id.tv_fail);
         }
     }
 

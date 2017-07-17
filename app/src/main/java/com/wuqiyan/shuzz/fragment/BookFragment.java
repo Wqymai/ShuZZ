@@ -2,7 +2,6 @@ package com.wuqiyan.shuzz.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -132,19 +131,18 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             if (newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItem + 1 == mAdapter.getItemCount()){
                 if (hasNext){
-
                   bookAskImpl.requestBookAskInfo(kw,currPage);
                 }
-                else {
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.setHide(true);
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    },2000);
-                }
+//                else {
+//                    final Handler handler = new Handler();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mAdapter.setHide(true);
+//                            mAdapter.notifyDataSetChanged();
+//                        }
+//                    },2000);
+//                }
             }
         }
 
@@ -163,10 +161,8 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onFailure(String error) {
 
           if (mAdapter.getItemCount() <= 0){
-
               mSwipeLayout.setRefreshing(false);
               llLoadFail.setVisibility(View.VISIBLE);
-
           }
           else {
               mAdapter.setLoadFail(true);

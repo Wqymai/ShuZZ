@@ -28,8 +28,10 @@ public class DetailActivity extends AppCompatActivity {
     private BookModel bookModel;
     private CardView cardView_desc;
     private CardView cardView_catalog;
+    private CardView cardView_recommend;
     private TextView tv_desc;
     private TextView tv_catalog;
+    private TextView tv_recommend;
     private Toolbar toolbar;
     private ProgressBar progressBar;
     private LinearLayout llLoadFail;
@@ -51,8 +53,10 @@ public class DetailActivity extends AppCompatActivity {
 
         cardView_catalog = (CardView) findViewById(R.id.cv_catalog);
         cardView_desc = (CardView) findViewById(R.id.cv_desc);
+        cardView_recommend = (CardView) findViewById(R.id.cv_recommend);
         tv_catalog = (TextView) findViewById(R.id.detail_catalog);
         tv_desc = (TextView) findViewById(R.id.detail_desc);
+        tv_recommend = (TextView) findViewById(R.id.detail_recommend);
         progressBar = (ProgressBar) findViewById(R.id.pb_detail);
         llLoadFail = (LinearLayout) findViewById(R.id.ll_loadFail);
 
@@ -87,6 +91,11 @@ public class DetailActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         cardView_catalog.setVisibility(View.VISIBLE);
                         tv_catalog.setText(model.catalog);
+                    }
+                    if (model.recommend != null && !model.recommend.equals("")){
+                        progressBar.setVisibility(View.GONE);
+                        cardView_recommend.setVisibility(View.VISIBLE);
+                        tv_recommend.setText(model.recommend);
                     }
                 }
             }
