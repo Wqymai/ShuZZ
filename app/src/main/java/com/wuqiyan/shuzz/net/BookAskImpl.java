@@ -45,13 +45,13 @@ public class BookAskImpl {
 
 
 
-    private int lastPage = 0;
+//    private int lastPage = 0;
     public void requestBookAskInfo(String kw, final int page){
 
-        if (lastPage == page && page!=1){
-            return;
-        }
-        lastPage = page;
+//        if (lastPage == page && page!=1){
+//            return;
+//        }
+//        lastPage = page;
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.BOOKASK_BASEURL).client(client).build();
         BookAskApi bookAskApi = retrofit.create(BookAskApi.class);
         Call<ResponseBody> call = bookAskApi.getBookAskInfo(kw,page);

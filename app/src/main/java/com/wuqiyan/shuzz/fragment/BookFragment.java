@@ -132,6 +132,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             if (newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItem + 1 == mAdapter.getItemCount()){
                 if (hasNext){
+
                   bookAskImpl.requestBookAskInfo(kw,currPage);
                 }
                 else {
@@ -175,7 +176,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onPageNext(boolean hasNext) {
-        this.hasNext= hasNext;
+        this.hasNext = hasNext;
         if (hasNext){
             currPage = currPage + 1;
         }
