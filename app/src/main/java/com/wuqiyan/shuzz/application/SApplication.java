@@ -50,6 +50,8 @@ public class SApplication extends Application {
         Picasso.setSingletonInstance(new Picasso.Builder(this).
                 downloader(new ImageDownLoader(client))
                 .build());
+
+
     }
     private void setUpDatabase(){
         DaoMaster.DevOpenHelper helper=new DaoMaster.DevOpenHelper(this,"book.db",null);

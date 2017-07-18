@@ -65,6 +65,9 @@ public class BookAskImpl {
                     if (list != null){
                         onLoadBookListener.onSuccess(list);
                     }
+                    else {
+                        onLoadBookListener.onFailure(Constant.LIST_NULL);
+                    }
                     //判断有没有下一页
                     int pagenext = page + 1;
                     if (html.contains("pn_" + pagenext)){

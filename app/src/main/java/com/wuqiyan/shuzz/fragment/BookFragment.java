@@ -11,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.adapter.BooksListAdapter;
+import com.wuqiyan.shuzz.comm.Constant;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.net.BookAskImpl;
 import com.wuqiyan.shuzz.net.OnLoadBookListener;
@@ -41,6 +43,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private String kw;
     private boolean hasNext = true;
     private LinearLayout llLoadFail;
+    private TextView tv_loadfail;
 
 
 
@@ -99,6 +102,8 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
                 }
             });
+
+            tv_loadfail = (TextView) llLoadFail.findViewById(R.id.tv_loadfail);
             return  rootView;
 
     }
@@ -161,8 +166,13 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onFailure(String error) {
 
           if (mAdapter.getItemCount() <= 0){
+              if (error.equals(Constant.LIST_NULL)){
+                  tv_loadfail.setText("暂时没有数据,点击重试");
+              }
+
               mSwipeLayout.setRefreshing(false);
               llLoadFail.setVisibility(View.VISIBLE);
+
           }
           else {
               mAdapter.setLoadFail(true);

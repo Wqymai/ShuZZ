@@ -14,6 +14,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"/>
     <TextView
+        android:id="@+id/tv_loadfail"
         android:layout_marginTop="5dp"
         android:layout_centerInParent="true"
         android:text="数据加载失败,点击重试"

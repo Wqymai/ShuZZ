@@ -32,5 +32,7 @@ public class Constant {
 
     public final static String BOOKTYPE="BOOKTYPE";
 
+    public final static String LIST_NULL="1000";
+
 
 }
