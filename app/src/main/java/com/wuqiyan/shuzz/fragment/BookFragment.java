@@ -25,6 +25,8 @@ import com.wuqiyan.shuzz.widget.DividerItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wuqiyan.shuzz.R.id.tv_loadfail;
+
 /**
  * Created by wuqiyan on 2017/6/19.
  */
@@ -43,7 +45,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private String kw;
     private boolean hasNext = true;
     private LinearLayout llLoadFail;
-    private TextView tv_loadfail;
+    private TextView tv_loadfail_hint;
 
 
 
@@ -103,7 +105,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 }
             });
 
-            tv_loadfail = (TextView) llLoadFail.findViewById(R.id.tv_loadfail);
+            tv_loadfail_hint = (TextView) llLoadFail.findViewById(tv_loadfail);
             return  rootView;
 
     }
@@ -167,7 +169,7 @@ public class BookFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
           if (mAdapter.getItemCount() <= 0){
               if (error.equals(Constant.LIST_NULL)){
-                  tv_loadfail.setText("暂时没有数据,点击重试");
+                  tv_loadfail_hint.setText("暂时没有数据,点击重试");
               }
 
               mSwipeLayout.setRefreshing(false);
