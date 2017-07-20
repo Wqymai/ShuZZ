@@ -1,12 +1,12 @@
 package com.wuqiyan.shuzz.widget;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.wuqiyan.shuzz.R;
+import com.wuqiyan.shuzz.net.BookAskImpl;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, IndexActivity.class));
+//                startActivity(new Intent(MainActivity.this, IndexActivity.class));
 //                IturingImpl ituring=new IturingImpl(getApplicationContext());
 //                ituring.getIturingBook("49",1);
 //                ituring.setOnLoadBookListener(new OnLoadBookListener() {
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 //                });
 //                ituring.getIturingTags();
 
-//                BookAskImpl impl=new BookAskImpl();
-//                impl.requestBookAskInfo("ios",1);
+                BookAskImpl impl=new BookAskImpl();
+                impl.requestJikeTagInfos();
 //                impl.setOnLoadBookListener(new OnLoadBookListener() {
 //                    @Override
 //                    public void onSuccess(List<BookModel> books) {

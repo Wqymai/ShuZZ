@@ -1,8 +1,11 @@
 package com.wuqiyan.shuzz.net;
 
+import android.util.Log;
+
 import com.wuqiyan.shuzz.comm.Constant;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.model.DetailModel;
+import com.wuqiyan.shuzz.model.TagModel;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -112,6 +115,58 @@ public class BookAskImpl {
                 listener.onFailure(t.getMessage());
             }
         });
+    }
+
+    public void requestJikeTagInfos(){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constant.JIKE_BASEURL).client(client).build();
+        BookAskApi bookAskApi = retrofit.create(BookAskApi.class);
+        Call<ResponseBody> call = bookAskApi.getJikeTagInfo("");
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String html = response.body().string();
+                    parseJikeTags(html);
+
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+    private List<TagModel> parseJikeTags(String responseBody){
+        List<TagModel> list=new ArrayList<>();
+        try {
+            Document doc_content = Jsoup.parse(responseBody);
+            Elements eles = doc_content.select("dd.cf");
+            if (!eles.isEmpty()){
+                for (Element  element : eles){
+                    Elements eles_a = element.select("a");
+                    if (!eles_a.isEmpty()){
+                        for (Element e : eles_a){
+                            String name = e.text().toLowerCase();
+
+                            Log.i("wqy",name);
+                            TagModel tagModel = new TagModel();
+                            tagModel.setTagId(Long.parseLong(e.attr("cgid")));
+                            tagModel.setTagName(name);
+                            tagModel.setTagState(1);
+                            tagModel.setTp(0l);
+                            list.add(tagModel);
+                        }
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return list;
     }
 
     private DetailModel parseDetailInfos(String responseBody){
