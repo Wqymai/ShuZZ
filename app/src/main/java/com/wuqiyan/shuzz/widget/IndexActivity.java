@@ -50,6 +50,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.index_layout);
         tags = TagsDao.queryTagsByState(0);
 
@@ -240,6 +241,21 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
             }
         }
     }
-
+//    //记录用户首次点击返回键的时间
+//    private long firstTime = 0;
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME) {
+//            long secondTime = System.currentTimeMillis();
+//            if (secondTime - firstTime > 2000) {
+//                Toast.makeText(IndexActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+//                firstTime = secondTime;
+//                return true;
+//            } else {
+//               SysApplication.clearActivity();
+//            }
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
 }

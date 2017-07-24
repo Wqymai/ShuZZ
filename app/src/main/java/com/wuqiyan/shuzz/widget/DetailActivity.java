@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import com.wuqiyan.shuzz.R;
+import com.wuqiyan.shuzz.application.SysApplication;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.model.DetailModel;
 import com.wuqiyan.shuzz.net.BookAskImpl;
@@ -54,6 +55,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SysApplication.addActivity(this);
         setContentView(R.layout.detail_layout);
 
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.wuqiyan.shuzz.R;
+import com.wuqiyan.shuzz.application.SysApplication;
 import com.wuqiyan.shuzz.dao.TagsDao;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class TagActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SysApplication.addActivity(this);
         setContentView(R.layout.tag_layout);
 
         currTag = getIntent().getStringExtra("currTag");

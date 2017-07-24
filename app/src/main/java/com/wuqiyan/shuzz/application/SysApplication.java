@@ -1,5 +1,6 @@
 package com.wuqiyan.shuzz.application;
 
+import android.app.Activity;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -14,7 +15,9 @@ import com.wuqiyan.shuzz.model.DaoSession;
 import com.wuqiyan.shuzz.net.IturingImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
@@ -27,7 +30,7 @@ import okhttp3.ResponseBody;
  * Created by wuqiyan on 17/6/29.
  */
 
-public class SApplication extends Application {
+public class SysApplication extends Application {
     private static DaoSession daoSession;
     @Override
     public void onCreate() {
@@ -120,5 +123,35 @@ public class SApplication extends Application {
                 }
             }
         }
+    }
+
+    private static List<Activity> lists = new ArrayList<>();
+
+    public static void addActivity(Activity activity) {
+        lists.add(activity);
+    }
+
+    public static void clearActivity() {
+      try {
+        if (lists != null) {
+            for (Activity activity : lists) {
+                if (activity != null)
+                    activity.finish();
+                }
+            }
+
+            lists.clear();
+        }catch (Exception e){
+          e.printStackTrace();
+      }
+      finally {
+          System.exit(0);
+      }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        System.gc();
     }
 }
