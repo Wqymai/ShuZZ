@@ -1,6 +1,8 @@
 package com.wuqiyan.shuzz.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.wuqiyan.shuzz.R;
 import com.wuqiyan.shuzz.model.BookModel;
 
@@ -114,6 +117,7 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .placeholder(R.mipmap.imgloading)
                     .error(R.mipmap.imghold)
                     .into(((ItemHolder) holder).img);
+
             ((ItemHolder) holder).share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -24,8 +24,19 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp">
+           <RelativeLayout
+               android:fitsSystemWindows="true"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
+               <ImageView
+                   android:id="@+id/bg_iv"
+                   android:scaleType="centerCrop"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"/>
+           </RelativeLayout>
 
             <ImageView
+                android:src="@mipmap/ic_launcher"
                 android:id="@+id/backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
