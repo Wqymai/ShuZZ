@@ -3,10 +3,16 @@ package com.wuqiyan.shuzz.widget;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 import com.wuqiyan.shuzz.R;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +26,26 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, IndexActivity.class));
+                Tencent tencent = Tencent.createInstance("1106317744",getApplicationContext());
+                tencent.login(MainActivity.this, "all", new IUiListener() {
+                    @Override
+                    public void onComplete(Object o) {
+                        Log.i("wqy","1===成功了");
+                        JSONObject jo = (JSONObject)o ;
+                        Log.i("wqy","json=" + String.valueOf(jo));
+                    }
+
+                    @Override
+                    public void onError(UiError uiError) {
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+//                startActivity(new Intent(MainActivity.this, IndexActivity.class));
 //                IturingImpl ituring=new IturingImpl(getApplicationContext());
 //                ituring.getIturingBook("49",1);
 //                ituring.setOnLoadBookListener(new OnLoadBookListener() {
@@ -67,7 +92,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        Tencent.onActivityResultData(requestCode, resultCode, data, new IUiListener() {
+            @Override
+            public void onComplete(Object o) {
+                Log.i("wqy","1===成功了");
+                JSONObject jo = (JSONObject)o ;
+                Log.i("wqy","json=" + String.valueOf(jo));
+            }
 
+            @Override
+            public void onError(UiError uiError) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
 
 }

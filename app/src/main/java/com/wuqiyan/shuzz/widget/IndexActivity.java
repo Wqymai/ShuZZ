@@ -1,6 +1,13 @@
 package com.wuqiyan.shuzz.widget;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,10 +28,19 @@ import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
+import com.tencent.connect.UserInfo;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 import com.wuqiyan.shuzz.R;
+import com.wuqiyan.shuzz.comm.SPUtils;
 import com.wuqiyan.shuzz.dao.TagsDao;
 import com.wuqiyan.shuzz.fragment.HomeFragment;
 import com.wuqiyan.shuzz.fragment.SearchFragment;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -46,6 +62,12 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     private int menuType = 0;
     private SearchView searchView;
     private View headerLayout;
+    private Tencent mTencent;
+    private SPUtils spUtils ;
+    private ImageView ivAvatar;
+    private TextView tvNickName;
+    private UserInfo mInfo = null;
+    private boolean needLogin = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +89,22 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
         initView();
 
+        spUtils = new SPUtils(getApplicationContext());
+        mTencent = Tencent.createInstance("1106317744",getApplicationContext());
+        if (!spUtils.getString("openid","").equals("")) {
+
+            long curTime = System.currentTimeMillis();
+            long last = spUtils.getLong("last", 0l);
+            if (curTime >= last) {//过期
+                //需要重新登录
+                needLogin = true;
+            } else {
+                needLogin = false;
+                //加载用户信息
+                loadUserInfo();
+            }
+
+        }
     }
 
     public void initView() {
@@ -110,25 +148,38 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
                         Toast.makeText(IndexActivity.this,"love",Toast.LENGTH_LONG).show();
                         break;
                     case R.id.item_share:
+                        Toast.makeText(IndexActivity.this,"share",Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.item_loginout:
+                        Toast.makeText(IndexActivity.this,"login out",Toast.LENGTH_LONG).show();
                         break;
                 }
                 return true;
             }
         });
 
-        ImageView ivAvatar = (ImageView) headerLayout.findViewById(R.id.ivAvatar);
+        ivAvatar = (ImageView) headerLayout.findViewById(R.id.ivAvatar);
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(IndexActivity.this,"登录1",Toast.LENGTH_LONG).show();
+                if (needLogin){
+                    qqLogin();
+                }
+                else {
+                    Toast.makeText(IndexActivity.this,"您已登录！",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        TextView tvNickName = (TextView) headerLayout.findViewById(R.id.tvNickName);
+        tvNickName = (TextView) headerLayout.findViewById(R.id.tvNickName);
         tvNickName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(IndexActivity.this,"登录2",Toast.LENGTH_LONG).show();
+                if (needLogin){
+                   qqLogin();
+                }else {
+                    Toast.makeText(IndexActivity.this,"您已登录！",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -181,36 +232,6 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.add_item, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        menu.clear();
-//        MenuInflater inflater = getMenuInflater();
-//        switch (menuType){
-//            case 0:
-//                inflater.inflate(R.menu.add_item, menu);
-//                break;
-//            case 1:
-//                inflater.inflate(R.menu.search_item, menu);
-//
-//                break;
-//        }
-//        return super.onPrepareOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onMenuItemClick(MenuItem item) {
-//        if (item.getItemId() == R.id.add_tag){
-//            startActivityForResult(new Intent(IndexActivity.this,TagActivity.class),REQUEST_CODE);
-//        }
-//
-//        return false;
-//    }
 
     @Override
     protected void onResume() {
@@ -219,14 +240,21 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null){
-            List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.remove(homeFragment);
-            HomeFragment newHomeFrag = new HomeFragment();
-            newHomeFrag.setTags(newTagsList);
-            ft.replace(R.id.maindfragment,newHomeFrag).commitAllowingStateLoss();
-        }
+
+      if (requestCode != 11101) {
+          if (data != null) {
+              List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
+              FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+              ft.remove(homeFragment);
+              HomeFragment newHomeFrag = new HomeFragment();
+              newHomeFrag.setTags(newTagsList);
+              ft.replace(R.id.maindfragment, newHomeFrag).commitAllowingStateLoss();
+          }
+      }
+      else {
+        Tencent.onActivityResultData(requestCode, resultCode, data,null);
+      }
+
     }
 
     public void switchContent(Fragment from, Fragment to) {
@@ -241,21 +269,145 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
             }
         }
     }
-//    //记录用户首次点击返回键的时间
-//    private long firstTime = 0;
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME) {
-//            long secondTime = System.currentTimeMillis();
-//            if (secondTime - firstTime > 2000) {
-//                Toast.makeText(IndexActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-//                firstTime = secondTime;
-//                return true;
-//            } else {
-//               SysApplication.clearActivity();
-//            }
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
 
+
+
+    private void qqLogin(){
+        mTencent.login(IndexActivity.this, "all", new IUiListener() {
+            @Override
+            public void onComplete(Object o) {
+                saveLoginInfo(o);
+            }
+
+            @Override
+            public void onError(UiError uiError) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    private void loadUserInfo(){
+            String nickname = spUtils.getString("nickname","点击头像使用QQ登录");
+            tvNickName.setText(nickname);
+            String figureurl_qq_2= spUtils.getString("figureurl_qq_2","");
+            Picasso.with(getApplicationContext())
+                .load(figureurl_qq_2)
+                .transform(new CircleImageTransformation())
+                .resize(dip2px(48),dip2px(48))
+                .centerCrop()
+                .placeholder(R.mipmap.ic_account_circle_white_48dp)
+                .error(R.mipmap.ic_account_circle_white_48dp)
+                .into(ivAvatar);
+    }
+
+    private int dip2px(float dpValue) {
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    private void qqUserInfo(){
+        mInfo = new UserInfo(this,mTencent.getQQToken());
+        mInfo.getUserInfo(new IUiListener() {
+            @Override
+            public void onComplete(Object o) {
+                saveUserInfo(o);
+            }
+
+            @Override
+            public void onError(UiError uiError) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    private void saveUserInfo(Object o){
+        try {
+            JSONObject jsonObject = (JSONObject) o;
+            String nickname = jsonObject.optString("nickname");
+            String gender = jsonObject.optString("gender");
+            String province = jsonObject.optString("province");
+            String city = jsonObject.optString("city");
+            String figureurl_qq_1 = jsonObject.optString("figureurl_qq_1");
+            String figureurl_qq_2 = jsonObject.optString("figureurl_qq_2");
+            spUtils.putString("nickname",nickname);
+            spUtils.putString("gender",gender);
+            spUtils.putString("province",province);
+            spUtils.putString("city",city);
+            spUtils.putString("figureurl_qq_1",figureurl_qq_1);
+            spUtils.putString("figureurl_qq_2",figureurl_qq_2);
+            loadUserInfo();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private void saveLoginInfo(Object o){
+        try {
+            JSONObject jsonObject = (JSONObject) o;
+            String openid = jsonObject.optString("openid");
+            String access_token = jsonObject.optString("access_token");
+            String expires_in = String.valueOf(jsonObject.opt("expires_in"));
+            long lastTime = System.currentTimeMillis() + Long.parseLong(expires_in)*1000;
+            spUtils.putString("openid",openid);
+            spUtils.putString("access_token",access_token);
+            spUtils.putLong("last",lastTime);
+            mTencent.setOpenId(openid);
+            mTencent.setAccessToken(access_token,expires_in);
+            qqUserInfo();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    public class CircleImageTransformation implements Transformation {
+
+        /**
+         * A unique key for the transformation, used for caching purposes.
+         */
+        private static final String KEY = "circleImageTransformation";
+
+        @Override
+        public Bitmap transform(Bitmap source) {
+
+            int minEdge = Math.min(source.getWidth(), source.getHeight());
+            int dx = (source.getWidth() - minEdge) / 2;
+            int dy = (source.getHeight() - minEdge) / 2;
+
+            // Init shader
+            Shader shader = new BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            Matrix matrix = new Matrix();
+            matrix.setTranslate(-dx, -dy);   // Move the target area to center of the source bitmap
+            shader.setLocalMatrix(matrix);
+
+            // Init paint
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setShader(shader);
+
+            // Create and draw circle bitmap
+            Bitmap output = Bitmap.createBitmap(minEdge, minEdge, source.getConfig());
+            Canvas canvas = new Canvas(output);
+            canvas.drawOval(new RectF(0, 0, minEdge, minEdge), paint);
+
+            // Recycle the source bitmap, because we already generate a new one
+            source.recycle();
+
+            return output;
+        }
+
+        @Override
+        public String key() {
+            return KEY;
+        }
+    }
 }

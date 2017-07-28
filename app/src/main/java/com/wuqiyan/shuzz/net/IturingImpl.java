@@ -69,7 +69,7 @@ public class IturingImpl{
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String pages = parseIturingPages(response.body().string());
-                    new SPUtils(mContext,"conf").putString(type,pages);
+                    new SPUtils(mContext).putString(type,pages);
                     onLoadPagesListener.onSuccess(Integer.parseInt(pages));
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -16,5 +16,10 @@
             android:icon="@mipmap/ic_open_in_new_grey600_48dp"
             android:title="分享一下"
             ></item>
+        <item
+            android:id="@+id/item_loginout"
+            android:icon="@mipmap/ic_exit_to_app_grey600_48dp"
+            android:title="注销"
+            ></item>
     </group>
 </menu>

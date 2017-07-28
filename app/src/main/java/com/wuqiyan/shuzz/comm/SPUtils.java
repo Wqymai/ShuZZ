@@ -12,14 +12,15 @@ import java.util.Map;
 public class SPUtils {
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private static String spName ="conf";
 
     /**
      * SPUtils构造函数
      * <p>在Application中初始化</p>
      *
-     * @param spName  spName
+
      */
-    public SPUtils(Context context,String spName) {
+    public SPUtils(Context context) {
         sp =context.getSharedPreferences(spName, Context.MODE_PRIVATE);
         editor = sp.edit();
         editor.commit();
