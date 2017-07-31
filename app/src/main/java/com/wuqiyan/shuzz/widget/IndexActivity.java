@@ -105,6 +105,9 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
             }
 
         }
+        else {
+            needLogin = true;
+        }
     }
 
     public void initView() {
@@ -151,7 +154,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
                         Toast.makeText(IndexActivity.this,"share",Toast.LENGTH_LONG).show();
                         break;
                     case R.id.item_loginout:
-                        Toast.makeText(IndexActivity.this,"login out",Toast.LENGTH_LONG).show();
+                        logout();
                         break;
                 }
                 return true;
@@ -212,14 +215,12 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
             case 1:
                 menuType = 1;
                 mtoolbar.setTitle("搜索");
-                if (searchFragment == null){
-                  searchFragment = new SearchFragment();
-                }
+//                if (searchFragment == null){
+                SearchFragment  searchFragment = new SearchFragment();
+//                }
                 switchContent(isFragment,searchFragment);
                 break;
         }
-//        invalidateOptionsMenu();
-
     }
 
     @Override
@@ -272,6 +273,22 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
 
 
+    private void logout(){
+        mTencent.logout(this);
+        spUtils.putString("openid","");
+        spUtils.putString("access_token","");
+        spUtils.putLong("last",0l);
+        spUtils.putString("nickname","点击头像使用QQ登录");
+        spUtils.putString("figureurl_qq_2","");
+        spUtils.putString("figureurl_qq_1","");
+        spUtils.putString("gender","");
+        spUtils.putString("province","");
+        spUtils.putString("city","");
+        ivAvatar.setImageResource(R.mipmap.ic_account_circle_white_48dp);
+        tvNickName.setText("点击头像使用QQ登录");
+        needLogin = true;
+    }
+
     private void qqLogin(){
         mTencent.login(IndexActivity.this, "all", new IUiListener() {
             @Override
@@ -294,7 +311,11 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     private void loadUserInfo(){
             String nickname = spUtils.getString("nickname","点击头像使用QQ登录");
             tvNickName.setText(nickname);
-            String figureurl_qq_2= spUtils.getString("figureurl_qq_2","");
+            String figureurl_qq_2 = spUtils.getString("figureurl_qq_2","");
+            if (figureurl_qq_2.equals("")){
+                ivAvatar.setImageResource(R.mipmap.ic_account_circle_white_48dp);
+                return;
+            }
             Picasso.with(getApplicationContext())
                 .load(figureurl_qq_2)
                 .transform(new CircleImageTransformation())
