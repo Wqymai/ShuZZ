@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import com.wuqiyan.shuzz.dao.TagsDao;
 import com.wuqiyan.shuzz.model.DaoMaster;
 import com.wuqiyan.shuzz.model.DaoSession;
-import com.wuqiyan.shuzz.net.IturingImpl;
+import com.wuqiyan.shuzz.net.BookAskImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +44,8 @@ public class SysApplication extends Application {
                         .build());
 
        if (!TagsDao.hasTags()){
-           new IturingImpl(this).getIturingTags();
+//           new IturingImpl(this).getIturingTags();
+           new BookAskImpl().requestMookTagInfos();
        }
        //设置picasso请求https
         OkHttpClient client = new OkHttpClient.Builder()

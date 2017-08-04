@@ -175,8 +175,6 @@ public class IturingImpl{
         tagsList.add(new TagModel((long) 35,"c#",0,currTime - 5000));
         tagsList.add(new TagModel((long) 367,"ios",0,currTime - 6000));
         tagsList.add(new TagModel((long) 283,"jquery",0,currTime - 7000));
-//        tagsList.add(new TagModel((long) 90,"数据库",0,currTime - 8000));
-//        tagsList.add(new TagModel((long) 69,"机器学习",0,currTime - 9000));
         return tagsList;
     }
     private boolean checkTags(TagModel tag){

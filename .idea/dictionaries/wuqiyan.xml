@@ -12,6 +12,7 @@
       <w>pagenumber</w>
       <w>roundcorner</w>
       <w>tagid</w>
+      <w>tagname</w>
     </words>
   </dictionary>
 </component>

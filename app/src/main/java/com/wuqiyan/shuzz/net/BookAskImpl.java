@@ -3,6 +3,7 @@ package com.wuqiyan.shuzz.net;
 import android.util.Log;
 
 import com.wuqiyan.shuzz.comm.Constant;
+import com.wuqiyan.shuzz.dao.TagsDao;
 import com.wuqiyan.shuzz.model.BookModel;
 import com.wuqiyan.shuzz.model.DetailModel;
 import com.wuqiyan.shuzz.model.TagModel;
@@ -115,6 +116,63 @@ public class BookAskImpl {
                 listener.onFailure(t.getMessage());
             }
         });
+    }
+
+    public void requestMookTagInfos(){
+        addDefaultTags();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://www.imooc.com/").client(client).build();
+        BookAskApi bookAskApi = retrofit.create(BookAskApi.class);
+        Call<ResponseBody> call = bookAskApi.getMoocTagInfo();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    List<TagModel> tagList = parseMoocTags(response.body().string());
+                    TagsDao.insertTags(tagList);
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public List<TagModel> parseMoocTags(String responseBody){
+        if (responseBody == null || responseBody.equals("") || responseBody==""){
+            return null;
+        }
+        List<TagModel> list = new ArrayList<>();
+        try {
+            Document doc_content = Jsoup.parse(responseBody);
+            Elements elements = doc_content.select(".course-nav-row");
+            if (!elements.isEmpty()){
+                Document document = Jsoup.parse(elements.get(1).toString());
+                Elements elements1 = document.select(".course-nav-item:not(.on)");
+                if (!elements1.isEmpty()){
+                    for (Element e: elements1) {
+                        Elements e1 = e.select("li a");
+                        TagModel tagModel = new TagModel();
+                        tagModel.setTagId(Long.parseLong(e1.attr("data-id")));
+                        tagModel.setTagName(e1.text().toLowerCase());
+                        tagModel.setTagState(1);
+                        tagModel.setTp(0l);
+                        if (!checkTags(tagModel)){
+                            list.add(tagModel);
+                        }
+                    }
+                }
+            }
+
+        }catch (Exception e){
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public void requestJikeTagInfos(){
@@ -266,6 +324,50 @@ public class BookAskImpl {
         htmlStr=m_html.replaceAll(""); //过滤html标签
 
         return htmlStr.trim(); //返回文本字符串
+    }
+
+
+    private void addDefaultTags(){
+        List<TagModel> tagsList=new ArrayList<>();
+        long currTime = System.currentTimeMillis();
+        tagsList.add(new TagModel((long) 220,"java",0,currTime));
+        tagsList.add(new TagModel((long) 1362,"c#",0,currTime - 1000));
+        tagsList.add(new TagModel((long) 1118,"python",0,currTime - 2000));
+        tagsList.add(new TagModel((long) 1,"php",0,currTime - 3000));
+        tagsList.add(new TagModel((long) 223,"android",0,currTime - 4000));
+        tagsList.add(new TagModel((long) 955,"ios",0,currTime - 5000));
+        tagsList.add(new TagModel((long) 1331,"c++",0,currTime - 6000));
+        tagsList.add(new TagModel((long) 952,"mysql",0,currTime - 7000));
+        TagsDao.insertTags(tagsList);
+    }
+    private boolean checkTags(TagModel tag){
+        boolean alr = false;
+        if (tag.getTagId().equals((long) 220)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) 1362)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) 1118)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) 1)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) 223)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) 955)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) 1331)) {
+            alr = true;
+
+        } else if (tag.getTagId().equals((long) 952)) {
+            alr = true;
+
+        }
+        return alr;
     }
 
 }

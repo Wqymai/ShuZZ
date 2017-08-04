@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import com.tencent.connect.UserInfo;
+import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -78,6 +80,8 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
         homeFragment = new HomeFragment();
         isFragment = homeFragment;
+
+
 
 
         //navgationview
@@ -151,7 +155,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
                         Toast.makeText(IndexActivity.this,"love",Toast.LENGTH_LONG).show();
                         break;
                     case R.id.item_share:
-                        Toast.makeText(IndexActivity.this,"share",Toast.LENGTH_LONG).show();
+                        share();
                         break;
                     case R.id.item_loginout:
                         logout();
@@ -188,6 +192,33 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
 
     }
 
+
+    private void share(){
+        final Bundle params = new Bundle();
+        params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+        params.putString(QQShare.SHARE_TO_QQ_TITLE, "程序员找书就用搜书吧");
+        params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  "以前找书好辛苦，现在搜书吧让你找书愉快到飞~啦啦啦啦啦");
+        params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  "http://www.qq.com/news/1.html");
+        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,"http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
+        params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  getResources().getString(R.string.app_name));
+        params.putInt(QQShare.SHARE_TO_QQ_EXT_INT,  QQShare.SHARE_TO_QQ_FLAG_QZONE_ITEM_HIDE);
+        mTencent.shareToQQ(IndexActivity.this, params, new IUiListener() {
+            @Override
+            public void onComplete(Object o) {
+
+            }
+
+            @Override
+            public void onError(UiError uiError) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
 
     //设置启动页
     private void setDefaultFragment(List<String> tagsList) {
@@ -242,7 +273,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-      if (requestCode != 11101) {
+      if (requestCode != 11101 && requestCode != 10103) {
           if (data != null) {
               List<String> newTagsList = data.getStringArrayListExtra("NEW_BOOK_TAGS");
               FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -290,7 +321,8 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
     }
 
     private void qqLogin(){
-        mTencent.login(IndexActivity.this, "all", new IUiListener() {
+
+        mTencent.login(IndexActivity.this, "get_user_info", new IUiListener() {
             @Override
             public void onComplete(Object o) {
                 saveLoginInfo(o);
@@ -373,6 +405,7 @@ public class IndexActivity extends AppCompatActivity implements BottomNavigation
         }
     }
     private void saveLoginInfo(Object o){
+        Log.i("youle",o.toString());
         try {
             JSONObject jsonObject = (JSONObject) o;
             String openid = jsonObject.optString("openid");

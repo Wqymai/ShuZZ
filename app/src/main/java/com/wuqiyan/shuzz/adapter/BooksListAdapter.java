@@ -1,8 +1,6 @@
 package com.wuqiyan.shuzz.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.wuqiyan.shuzz.R;
+import com.wuqiyan.shuzz.comm.SPUtils;
 import com.wuqiyan.shuzz.model.BookModel;
 
 import java.util.ArrayList;
@@ -121,7 +119,13 @@ public class BooksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ItemHolder) holder).share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext,"收藏成功！",Toast.LENGTH_SHORT).show();
+                    SPUtils spUtils = new SPUtils(mContext);
+                    if (spUtils.getString("openid","").equals("")){
+                        Toast.makeText(mContext,"您还没登录，请先登录！",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(mContext,"收藏成功！",Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             holder.itemView.setTag(mBooksData.get(position));
